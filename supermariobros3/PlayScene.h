@@ -3,6 +3,7 @@
 #include "Textures.h"
 #include "Scene.h"
 #include "GameObject.h"
+#include "Map.h"
 #include "Brick.h"
 #include "Mario.h"
 #include "Goomba.h"
@@ -13,15 +14,17 @@ class CPlayScene: public CScene
 {
 protected: 
 	// A play scene has to have player, right? 
-	LPGAMEOBJECT player;					
+	LPGAMEOBJECT player;
 
 	vector<LPGAMEOBJECT> objects;
+	CMap* map = nullptr;
 
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);
 
 	void _ParseSection_ASSETS(string line);
 	void _ParseSection_OBJECTS(string line);
+	void _ParseSection_MAP(string line);
 
 	void LoadAssets(LPCWSTR assetFile);
 	

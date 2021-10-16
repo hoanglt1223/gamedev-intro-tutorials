@@ -6,6 +6,9 @@ assets\coin.txt
 assets\goomba.txt
 assets\cloud.txt
 assets\koopas.txt
+[MAP]
+#100	maps\map1.png	maps\map1.txt	27	210	9	11	16	16	0	2832	2832	3360
+assets\world-1-1.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
