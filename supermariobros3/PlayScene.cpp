@@ -79,7 +79,7 @@ void CPlayScene::_ParseSection_ANIMATIONS(string line)
 	LPANIMATION ani = new CAnimation();
 
 	int ani_id = atoi(tokens[0].c_str());
-	for (int i = 1; i < tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time  
+	for (size_t i = 1; i < tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time  
 	{
 		int sprite_id = atoi(tokens[i].c_str());
 		int frame_time = atoi(tokens[i+1].c_str());
@@ -129,13 +129,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float cell_width = (float)atof(tokens[3].c_str());
 		float cell_height = (float)atof(tokens[4].c_str());
 		int length = atoi(tokens[5].c_str());
-		int sprite_begin = atoi(tokens[6].c_str());
-		int sprite_middle = atoi(tokens[7].c_str());
-		int sprite_end = atoi(tokens[8].c_str());
+		int type = atoi(tokens[6].c_str());
+		int sprite_begin = atoi(tokens[7].c_str());
+		int sprite_middle = atoi(tokens[8].c_str());
+		int sprite_end = atoi(tokens[9].c_str());
 
 		obj = new CPlatform(
 			x, y,
-			cell_width, cell_height, length,
+			cell_width, cell_height, length, type,
 			sprite_begin, sprite_middle, sprite_end
 		);
 
@@ -166,33 +167,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 void CPlayScene::_ParseSection_MAP(string line)
 {
-	string texturePath;
-	int textureId;
-	int mapHeight, mapWidth;
-	int tilesheetRows, tilesheetColumns;
-	int tileWidth, tileHeight;
-	int mapStart, mapEnd;
-	int secretStart, secretEnd;
-
 	LPCWSTR path = ToLPCWSTR(line);
-
 	map = new CMap(path);
-
-	//f >> texturePath >> textureId >>
-	//	mapHeight >> mapWidth >>
-	//	tilesheetRows >> tilesheetColumns >>
-	//	tileWidth >> tileHeight >>
-	//	mapStart >> mapEnd >>
-	//	secretStart >> secretEnd;
-
-	//map = new CMap(textureId, ToLPCWSTR(texturePath),
-	//	mapHeight, mapWidth, 
-	//	tilesheetRows, tilesheetColumns, 
-	//	tileWidth, tileHeight, 
-	//	mapStart, mapEnd, 
-	//	secretStart, secretEnd);
-
-	//DebugOut(L"[INFO] Map loaded! \n");
 }
 
 
@@ -297,7 +273,7 @@ void CPlayScene::Update(DWORD dt)
 
 	if (cx < 0) cx = 0;
 
-	CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
+	CGame::GetInstance()->SetCamPos(cx, 222 /*cy*/);
 
 	PurgeDeletedObjects();
 }
@@ -305,7 +281,7 @@ void CPlayScene::Update(DWORD dt)
 void CPlayScene::Render()
 {
 	map->Render();
-	for (int i = 0; i < objects.size(); i++)
+	for (size_t i = 0; i < objects.size(); i++)
 		objects[i]->Render();
 }
 
@@ -330,7 +306,7 @@ void CPlayScene::Clear()
 */
 void CPlayScene::Unload()
 {
-	for (int i = 0; i < objects.size(); i++)
+	for (size_t i = 0; i < objects.size(); i++)
 		delete objects[i];
 
 	objects.clear();

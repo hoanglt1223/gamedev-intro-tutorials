@@ -5,7 +5,8 @@
 
 void CPlatform::Render()
 {
-	if (this->length <= 0) return; 
+	if (length <= 0) return; 
+	if (type == PLATFORM_GROUND) return;
 	float xx = x; 
 	CSprites * s = CSprites::GetInstance();
 
@@ -19,9 +20,9 @@ void CPlatform::Render()
 	if (length>1)
 		s->Get(this->spriteIdEnd)->Draw(xx, y);
 
-	//
+	
 	//RenderBoundingBox();
-	//
+	
 }
 
 void CPlatform::GetBoundingBox(float& l, float& t, float& r, float& b)
