@@ -117,6 +117,27 @@ void CGame::Init(HWND hWnd, HINSTANCE hInstance)
 
 	pD3DDevice->CreateSamplerState(&desc, &this->pPointSamplerState);
 
+
+	// The D3D10_RASTERIZER_DESC structure
+	D3D10_RASTERIZER_DESC rasterDescription;
+	rasterDescription.FillMode = D3D10_FILL_SOLID;
+	rasterDescription.CullMode = D3D10_CULL_NONE;
+	rasterDescription.FrontCounterClockwise = true;
+	rasterDescription.DepthBias = false;
+	rasterDescription.DepthBiasClamp = 0;
+	rasterDescription.SlopeScaledDepthBias = 0;
+	rasterDescription.DepthClipEnable = false;
+	rasterDescription.ScissorEnable = false;
+	rasterDescription.MultisampleEnable = false;
+	rasterDescription.AntialiasedLineEnable = false;
+
+	// Create a new rasterizer state
+	ID3D10RasterizerState* g_pRasterizerState;
+	pD3DDevice->CreateRasterizerState(&rasterDescription, &g_pRasterizerState);
+
+	// Set the new rasterizer state
+	pD3DDevice->RSSetState(g_pRasterizerState);
+
 	// create the sprite object to handle sprite drawing 
 	hr = D3DX10CreateSprite(pD3DDevice, 0, &spriteObject);
 
