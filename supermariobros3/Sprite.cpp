@@ -27,7 +27,7 @@ CSprite::CSprite(int id, int left, int top, int right, int bottom, LPTEXTURE tex
 	sprite.ColorModulate = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	sprite.TextureIndex = 0;
 
-	D3DXMatrixScaling(&this->matScaling, -(FLOAT)spriteWidth, (FLOAT)spriteHeight, 1.0f);
+	D3DXMatrixScaling(&this->matScaling, (FLOAT)spriteWidth, (FLOAT)spriteHeight, 1.0f);
 }
 
 void CSprite::Draw(float x, float y)
@@ -47,6 +47,28 @@ void CSprite::Draw(float x, float y)
 	D3DXMatrixTranslation(&matTranslation, x - cx, g->GetBackBufferHeight() - y + cy, 0.0f);
 
 	this->sprite.matWorld = (this->matScaling * matTranslation);
+
+	g->GetSpriteHandler()->DrawSpritesImmediate(&sprite, 1, 0, 0);
+}
+
+void CSprite::Draw(int nx, float x, float y)
+{
+	CGame* g = CGame::GetInstance();
+	float cx, cy;
+	g->GetCamPos(cx, cy);
+
+	cx = (FLOAT)floor(cx);
+	cy = (FLOAT)floor(cy);
+
+	D3DXMATRIX matTranslation;
+	D3DXMATRIX matRotation;
+
+	x = (FLOAT)floor(x);
+	y = (FLOAT)floor(y);
+
+	D3DXMatrixTranslation(&matTranslation, x - cx , g->GetBackBufferHeight() - y + cy, 0);
+	D3DXMatrixScaling(&matRotation, nx, 1, 0);
+	this->sprite.matWorld = (this->matScaling * matRotation * matTranslation);
 
 	g->GetSpriteHandler()->DrawSpritesImmediate(&sprite, 1, 0, 0);
 }
