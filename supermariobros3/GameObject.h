@@ -13,6 +13,7 @@ using namespace std;
 
 #define ID_TEX_BBOX -100		// special texture to draw object bounding box
 #define GLOBAL_GRAVITY 0.0025f
+#define BBOX_ALPHA 0.25f
 
 class CGameObject
 {
