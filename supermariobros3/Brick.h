@@ -4,8 +4,10 @@
 #include "Animation.h"
 #include "Animations.h"
 
-#define ID_ANI_BRICK_DEFAULT 10000
+#define ID_ANI_BRICK_BREAKABLE 10000
 #define ID_ANI_BRICK_QUESTION_MARK 10001
+#define ID_ANI_BRICK_QUESTION_EMPTY 10002
+
 #define BRICK_WIDTH 16
 #define BRICK_BBOX_WIDTH 16
 #define BRICK_BBOX_HEIGHT 16
@@ -23,9 +25,16 @@
 #define TYPE
 class CBrick : public CGameObject {
 	int type;
+	bool isHit;
+
+	float imitateY{}, entryY{};
+	bool isPressed;
+	ULONGLONG timer;
 public:
-	CBrick(float x, float y, int type) : CGameObject(x, y) { this->type = type;  }
+	CBrick(float x, float y, int type);
 	void Render();
 	void Update(DWORD dt) {}
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
+
+	void Hit();
 };

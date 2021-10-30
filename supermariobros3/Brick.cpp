@@ -1,16 +1,23 @@
 #include "Brick.h"
+#include "Mario.h"
+#include "PlayScene.h"
+
+CBrick::CBrick(float x, float y, int type) : CGameObject(x, y)
+{
+	this->type = type;
+	isHit = false;
+	isPressed = false;
+	SetState(BRICK_STATE_DEFAULT);
+	timer = 0;
+}
 
 void CBrick::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
 
 	int aniId = ID_ANI_BRICK_QUESTION_MARK;
-	//switch (type)
-	//{
-	//case BRICK_POWER_UP: 
-	//	aniId = ID_ANI_BRICK_QUESTION_MARK;
-	//	break;
-	//}
+	if (state == BRICK_STATE_EMPTY) aniId = ID_ANI_BRICK_QUESTION_EMPTY;
+	
 	animations->Get(aniId)->Render(x, y);
 	//RenderBoundingBox();
 }
@@ -22,3 +29,20 @@ void CBrick::GetBoundingBox(float &l, float &t, float &r, float &b)
 	r = l + BRICK_BBOX_WIDTH;
 	b = t + BRICK_BBOX_HEIGHT;
 }
+
+void CBrick::Hit()
+{
+	DebugOut(L"BRICK TYPE: %d \n", type);
+	if (state == BRICK_STATE_EMPTY) return;
+
+	isHit = true;
+
+	switch (type)
+	{
+	case BRICK_COIN:
+		CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+		mario->AddCoin();
+		break;
+	}
+}
+
