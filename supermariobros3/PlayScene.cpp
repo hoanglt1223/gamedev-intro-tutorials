@@ -120,7 +120,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
 	case OBJECT_TYPE_KOOPA: obj = new CKoopas(x, y); break;
-	case OBJECT_TYPE_BRICK: obj = new CBrick(x,y); break;
+	case OBJECT_TYPE_BRICK: {
+		int type = atoi(tokens[3].c_str());
+		obj = new CBrick(x, y, type); 
+		break;
+	}
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
 
 	case OBJECT_TYPE_PLATFORM:

@@ -3,7 +3,15 @@
 void CBrick::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
-	animations->Get(ID_ANI_BRICK)->Render(x, y);
+
+	int aniId = ID_ANI_BRICK_QUESTION_MARK;
+	//switch (type)
+	//{
+	//case BRICK_POWER_UP: 
+	//	aniId = ID_ANI_BRICK_QUESTION_MARK;
+	//	break;
+	//}
+	animations->Get(aniId)->Render(x, y);
 	//RenderBoundingBox();
 }
 
