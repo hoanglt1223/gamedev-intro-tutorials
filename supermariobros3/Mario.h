@@ -13,6 +13,7 @@
 #define MARIO_ACCEL_RUN_X	0.0007f
 
 #define MARIO_JUMP_SPEED_Y		0.5f
+#define MARIO_BIG_JUMP_SPEED_Y		0.6f
 #define MARIO_JUMP_RUN_SPEED_Y	0.6f
 
 #define MARIO_GRAVITY			0.002f
@@ -68,8 +69,6 @@
 #pragma endregion
 
 #define GROUND_Y 160.0f
-
-
 
 
 #define	MARIO_LEVEL_SMALL	1

@@ -1,5 +1,6 @@
 #include "Brick.h"
 #include "Mario.h"
+#include "Mushroom.h"
 #include "PlayScene.h"
 
 CBrick::CBrick(float x, float y, int type) : CGameObject(x, y)
@@ -34,6 +35,10 @@ void CBrick::Hit()
 {
 	DebugOut(L"BRICK TYPE: %d \n", type);
 	if (state == BRICK_STATE_EMPTY) return;
+
+	//LPSCENE scene = CGame::GetInstance()->GetCurrentScene();
+	//CGameObject* m = new CMushroom(50, 250, 0);
+	//((LPPLAYSCENE)scene)->AddObject(m);
 
 	isHit = true;
 

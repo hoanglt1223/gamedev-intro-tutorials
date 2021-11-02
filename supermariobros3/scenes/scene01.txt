@@ -6,6 +6,7 @@ assets\coin.txt
 assets\goomba.txt
 assets\cloud.txt
 assets\koopas.txt
+assets\mushroom.txt
 [MAP]
 assets\world-1-1.txt
 #
@@ -33,6 +34,9 @@ assets\world-1-1.txt
 4	140	120
 4	160	120
 4	180	120
+
+
+6	50	250
 
 #Goomba
 2	300	10

@@ -232,8 +232,8 @@ void CMario::SetState(int state)
 		{
 			if (abs(this->vx) == MARIO_RUNNING_SPEED)
 				vy = -MARIO_JUMP_RUN_SPEED_Y;
-			else
-				vy = -MARIO_JUMP_SPEED_Y;
+			else if (level == MARIO_LEVEL_SMALL) vy = -MARIO_JUMP_SPEED_Y;
+			else vy = -MARIO_BIG_JUMP_SPEED_Y;
 		}
 		break;
 

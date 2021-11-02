@@ -8,8 +8,8 @@
 #include "Sprites.h"
 #include "Portal.h"
 #include "Coin.h"
+#include "Mushroom.h"
 #include "Platform.h"
-
 #include "SampleKeyEventHandler.h"
 
 using namespace std;
@@ -126,6 +126,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
+	case 6: obj = new CMushroom(x, y, 0); break;
 
 	case OBJECT_TYPE_PLATFORM:
 	{
@@ -163,8 +164,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 
 	// General object setup
-	obj->SetPosition(x, y);
-
+	//obj->SetPosition(x, y);
 
 	objects.push_back(obj);
 }
