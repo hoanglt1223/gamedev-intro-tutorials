@@ -9,6 +9,7 @@
 #include "Portal.h"
 #include "Koopas.h"
 #include "Brick.h"
+#include "Mushroom.h"
 
 #include "Collision.h"
 
@@ -60,6 +61,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPortal(e);
 	else if (dynamic_cast<CBrick*>(e->obj))
 		OnCollisionWithBrick(e);
+	else if (dynamic_cast<CMushroom*>(e->obj))
+		OnCollisionWithMushroom(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -100,7 +103,6 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 {
 	CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
 	koopas->SetState(KOOPAS_STATE_DIE);
-
 }
 
 
@@ -124,6 +126,12 @@ void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 	}
 }
 
+void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
+{
+	SetLevel(MARIO_LEVEL_BIG);
+	CMushroom* m = (CMushroom*)e->obj;
+	m->Delete();
+}
 
 //
 // Get animation ID for small Mario

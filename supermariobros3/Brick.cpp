@@ -7,7 +7,6 @@ CBrick::CBrick(float x, float y, int type) : CGameObject(x, y)
 {
 	this->type = type;
 	isHit = false;
-	isPressed = false;
 	SetState(BRICK_STATE_DEFAULT);
 	timer = 0;
 }
@@ -36,18 +35,23 @@ void CBrick::Hit()
 	DebugOut(L"BRICK TYPE: %d \n", type);
 	if (state == BRICK_STATE_EMPTY) return;
 
-	//LPSCENE scene = CGame::GetInstance()->GetCurrentScene();
-	//CGameObject* m = new CMushroom(50, 250, 0);
-	//((LPPLAYSCENE)scene)->AddObject(m);
-
-	isHit = true;
+	SetState(BRICK_STATE_EMPTY);
 
 	switch (type)
 	{
 	case BRICK_COIN:
+	{
 		CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 		mario->AddCoin();
 		break;
+	}
+	case BRICK_POWER_UP:
+	{
+		LPSCENE scene = CGame::GetInstance()->GetCurrentScene();
+		CGameObject* m = new CMushroom(x, y - MUSHROOM_GROWING_HEIGHT, MUSHROOM_POWERUP);
+		((LPPLAYSCENE)scene)->AddObject(m);
+		break;
+	}
 	}
 }
 

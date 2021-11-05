@@ -126,7 +126,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
-	case 6: obj = new CMushroom(x, y, 0); break;
+	//case 6: obj = new CMushroom(x, y, 0); break;
 
 	case OBJECT_TYPE_PLATFORM:
 	{
