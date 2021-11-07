@@ -14,8 +14,7 @@
 #define KOOPAS_STATE_DIE 200
 #define KOOPAS_STATE_HIT 300
 
-#define ID_ANI_KOOPAS_WALKING_LEFT 6000
-#define ID_ANI_KOOPAS_WALKING_RIGHT 6003
+#define ID_ANI_KOOPAS_WALKING 6000
 #define ID_ANI_KOOPAS_DIE 6001
 #define ID_ANI_KOOPAS_HIT 6002
 
@@ -36,6 +35,7 @@ protected:
 	virtual void OnNoCollision(DWORD dt);
 
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
+	void OnCollisionWithPlatform(LPCOLLISIONEVENT e);
 
 public:
 	CKoopas(float x, float y);

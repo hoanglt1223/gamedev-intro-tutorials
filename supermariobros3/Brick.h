@@ -28,7 +28,6 @@ class CBrick : public CGameObject {
 	bool isHit;
 
 	float imitateY{}, entryY{};
-	bool isPressed;
 	ULONGLONG timer;
 public:
 	CBrick(float x, float y, int type);

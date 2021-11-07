@@ -45,14 +45,16 @@ void CKoopas::OnNoCollision(DWORD dt)
 		x += vx * dt;
 		y += vy * dt;
 	}
-
-
 }
 
 void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	if (!e->obj->IsBlocking()) return;
 	if (dynamic_cast<CKoopas*>(e->obj)) return;
+	if (dynamic_cast<CPlatform*>(e->obj))
+	{
+		OnCollisionWithPlatform(e);
+	}
 
 	if (e->ny != 0)
 	{
@@ -61,6 +63,23 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 	else if (e->nx != 0)
 	{
 		vx = -vx;
+	}
+}
+
+void CKoopas::OnCollisionWithPlatform(LPCOLLISIONEVENT e)
+{
+	CPlatform* p = dynamic_cast<CPlatform*>(e->obj);
+	int xx = x;
+	if (state == KOOPAS_STATE_WALKING)
+	{
+		//if (xxx >= p->GetEnd())
+		//{
+		//	vx = -KOOPAS_WALKING_SPEED;
+		//}
+		//if (xx <= p->GetStart())
+		//{
+		//	vx = KOOPAS_WALKING_SPEED;
+		//}
 	}
 }
 
@@ -82,13 +101,13 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CKoopas::Render()
 {
-	int aniId = ID_ANI_KOOPAS_WALKING_LEFT;
+	int aniId = ID_ANI_KOOPAS_WALKING;
 
 	if (vx < 0) {
-		aniId = ID_ANI_KOOPAS_WALKING_LEFT;
+		aniId = ID_ANI_KOOPAS_WALKING;
 	}
 	else if (vx > 0) {
-		aniId = ID_ANI_KOOPAS_WALKING_RIGHT;
+		aniId = ID_ANI_KOOPAS_WALKING;
 	}
 	if (state == KOOPAS_STATE_DIE)
 	{
@@ -99,7 +118,7 @@ void CKoopas::Render()
 		aniId = ID_ANI_KOOPAS_HIT;
 	}
 
-	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
+	CAnimations::GetInstance()->Get(aniId)->Render(nx, x, y);
 	//RenderBoundingBox();
 }
 
@@ -112,6 +131,7 @@ void CKoopas::SetState(int state)
 	case KOOPAS_STATE_DIE:
 		die_start = GetTickCount64();
 		y += (KOOPAS_BBOX_HEIGHT - KOOPAS_BBOX_HEIGHT_DIE) / 2;
+		y -= 10;
 		vx = 0;
 		vy = 0;
 		ax = 0;
