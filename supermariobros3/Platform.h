@@ -3,6 +3,7 @@
 #include "GameObject.h"
 
 #define PLATFORM_GROUND 0
+#define PLATFORM_SPECIAL 1
 
 // 
 // The most popular type of object in Mario! 
@@ -15,6 +16,7 @@ protected:
 	float cellHeight;
 	int type;
 	int spriteIdBegin, spriteIdMiddle, spriteIdEnd;
+	int isBlocking = 1;
 
 public: 
 	CPlatform(float x, float y,
@@ -35,8 +37,11 @@ public:
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	void RenderBoundingBox();
 
-	//virtual int GetStart() { return this->x; }
-	//virtual int GetEnd() { return this->x * this->; }
+	int IsSpecialPlatform() { return (type == PLATFORM_SPECIAL); }
+
+	int GetType() { return this->type; }
+	float GetStart() { return this->x; }
+	float GetEnd() { return this->x + this->length * this->cellWidth; }
 };
 
 typedef CPlatform* LPPLATFORM;

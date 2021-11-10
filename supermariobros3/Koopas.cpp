@@ -69,18 +69,18 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 void CKoopas::OnCollisionWithPlatform(LPCOLLISIONEVENT e)
 {
 	CPlatform* p = dynamic_cast<CPlatform*>(e->obj);
-	int xx = x;
-	if (state == KOOPAS_STATE_WALKING)
-	{
-		//if (xxx >= p->GetEnd())
-		//{
-		//	vx = -KOOPAS_WALKING_SPEED;
-		//}
-		//if (xx <= p->GetStart())
-		//{
-		//	vx = KOOPAS_WALKING_SPEED;
-		//}
-	}
+		float xx = x;
+		if (state == KOOPAS_STATE_WALKING)
+		{
+			if (xx <= p->GetStart())
+			{
+				vx = KOOPAS_WALKING_SPEED;
+			}
+			if (xx >= p->GetEnd())
+			{
+				vx = -KOOPAS_WALKING_SPEED;
+			}
+		}
 }
 
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -118,6 +118,8 @@ void CKoopas::Render()
 		aniId = ID_ANI_KOOPAS_HIT;
 	}
 
+	if (vx >= 0) nx = -1;
+	else if (vx < 0) nx = 1;
 	CAnimations::GetInstance()->Get(aniId)->Render(nx, x, y);
 	//RenderBoundingBox();
 }
