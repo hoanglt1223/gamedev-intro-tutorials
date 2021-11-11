@@ -28,8 +28,8 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_0:
 		mario->SetState(MARIO_STATE_DIE);
 		break;
-	case DIK_R: // reset
-		//Reload();
+	case DIK_R:
+		mario->Respawn();
 		break;
 	}
 }

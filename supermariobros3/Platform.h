@@ -41,7 +41,7 @@ public:
 
 	int GetType() { return this->type; }
 	float GetStart() { return this->x; }
-	float GetEnd() { return this->x + this->length * this->cellWidth; }
+	float GetEnd() { return (this->x + this->length * this->cellWidth); }
 };
 
 typedef CPlatform* LPPLATFORM;

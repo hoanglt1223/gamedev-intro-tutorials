@@ -91,8 +91,7 @@ class CMario : public CGameObject
 {
 	BOOLEAN isSitting;
 	float maxVx;
-	float ax;				// acceleration on x 
-	float ay;				// acceleration on y 
+	float ax, ay;				// acceleration on x, y 
 
 	int level; 
 	int untouchable; 
@@ -124,24 +123,26 @@ public:
 		isOnPlatform = false;
 		coin = 0;
 	}
-	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
-	void Render();
-	void SetState(int state);
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+	virtual void Render();
+	virtual void SetState(int state);
 
-	int IsCollidable()
+	virtual int IsCollidable()
 	{ 
 		return (state != MARIO_STATE_DIE); 
 	}
 
-	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable==0); }
+	virtual int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable==0); }
 
-	void OnNoCollision(DWORD dt);
-	void OnCollisionWith(LPCOLLISIONEVENT e);
+	virtual void OnNoCollision(DWORD dt);
+	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 
-	void SetLevel(int l);
+	virtual void SetLevel(int l);
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
 
-	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	virtual void Downgrade();
 
 	void AddCoin() { coin++; }
+	void Respawn();
 };

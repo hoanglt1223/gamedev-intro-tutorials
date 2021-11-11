@@ -41,6 +41,7 @@ public:
 	virtual void Delete() { isDeleted = true;  }
 	bool IsDeleted() { return isDeleted; }
 	int GetDirection() { return this->nx; }
+	void SetDirection(int nx) { this->nx = nx; }
 
 	void RenderBoundingBox();
 
@@ -52,6 +53,7 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {};
 	virtual void Render() = 0;
 	virtual void SetState(int state) { this->state = state; }
+	virtual void Downgrade() {};
 
 	//
 	// Collision ON or OFF ? This can change depending on object's state. For example: die
