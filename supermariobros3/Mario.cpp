@@ -71,7 +71,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 	{
 		if (goomba->GetState() != GOOMBA_STATE_DIE)
 		{
-			goomba->SetState(GOOMBA_STATE_DIE);
+			goomba->Downgrade();
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 	}
@@ -86,13 +86,21 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 {
 	CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
 
-	if (e->ny < 0)
+	if (koopas->GetState() != KOOPAS_STATE_STOMPED) {
+		if (e->ny < 0)
+		{
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+			koopas->Downgrade();
+			koopas->SetDirection(this->nx);
+		}
+		else Downgrade();
+	}
+	
+	else 
 	{
-		if (koopas->GetState() != KOOPAS_STATE_STOMPED) vy = -MARIO_JUMP_DEFLECT_SPEED;
 		koopas->Downgrade();
 		koopas->SetDirection(this->nx);
 	}
-	else Downgrade();
 }
 
 
