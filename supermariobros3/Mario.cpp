@@ -145,7 +145,7 @@ int CMario::GetAniIdSmall()
 	}
 	else
 		if (isSitting)
-			aniId = ID_ANI_MARIO_SIT;
+			aniId = ID_ANI_MARIO_BIG_SIT;
 		else if (vx == 0) aniId = ID_ANI_MARIO_SMALL_IDLE;
 		else if (ax * vx < 0) aniId = ID_ANI_MARIO_SMALL_BRACE;
 		else if (abs(ax) == MARIO_ACCEL_RUN_X)
@@ -166,19 +166,19 @@ int CMario::GetAniIdBig()
 	int aniId = -1;
 	if (!isOnPlatform)
 	{
-		if (abs(ax) == MARIO_ACCEL_RUN_X) aniId = ID_ANI_MARIO_JUMP_RUN;
-		else aniId = ID_ANI_MARIO_JUMP_WALK;
+		if (abs(ax) == MARIO_ACCEL_RUN_X) aniId = ID_ANI_MARIO_BIG_JUMP_RUN;
+		else aniId = ID_ANI_MARIO_BIG_JUMP_WALK;
 	}
 	else
-		if (isSitting) aniId = ID_ANI_MARIO_SIT;
-		else if (vx == 0) aniId = ID_ANI_MARIO_IDLE;
-		else if (ax * vx < 0) aniId = ID_ANI_MARIO_BRACE;
+		if (isSitting) aniId = ID_ANI_MARIO_BIG_SIT;
+		else if (vx == 0) aniId = ID_ANI_MARIO_BIG_IDLE;
+		else if (ax * vx < 0) aniId = ID_ANI_MARIO_BIG_BRACE;
 		else if (abs(ax) == MARIO_ACCEL_RUN_X)
-			aniId = ID_ANI_MARIO_RUNNING;
+			aniId = ID_ANI_MARIO_BIG_RUNNING;
 		else if (abs(ax) == MARIO_ACCEL_WALK_X)
-			aniId = ID_ANI_MARIO_WALKING;
+			aniId = ID_ANI_MARIO_BIG_WALKING;
 
-	if (aniId == -1) aniId = ID_ANI_MARIO_IDLE;
+	if (aniId == -1) aniId = ID_ANI_MARIO_BIG_IDLE;
 
 	return aniId;
 }
@@ -189,13 +189,13 @@ void CMario::Render()
 	int aniId = -1;
 
 	if (state == MARIO_STATE_DIE)
-		aniId = ID_ANI_MARIO_DIE;
+		aniId = ID_ANI_MARIO_BIG_DIE;
 	else if (level == MARIO_LEVEL_BIG)
 		aniId = GetAniIdBig();
 	else if (level == MARIO_LEVEL_SMALL)
 		aniId = GetAniIdSmall();
 
-	animations->Get(aniId)->Render(nx, x, y);
+	animations->Get(aniId)->Render(-nx, x, y);
 
 
 	DebugOutTitle(L"Coins: %d", coin);
