@@ -7,8 +7,9 @@ assets\goomba.txt
 assets\cloud.txt
 assets\koopas.txt
 assets\mushroom.txt
+assets\interface.txt
 [MAP]
-assets\world-1-1.txt
+scenes\world-1-1.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type

@@ -11,8 +11,9 @@
 #include "Brick.h"
 #include "Mushroom.h"
 #include "Platform.h"
-
 #include "Collision.h"
+
+
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -196,7 +197,6 @@ void CMario::Render()
 
 	animations->Get(aniId)->Render(nx, x, y);
 
-	//RenderBoundingBox();
 
 	DebugOutTitle(L"Coins: %d", coin);
 }

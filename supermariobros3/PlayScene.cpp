@@ -12,6 +12,8 @@
 #include "Platform.h"
 #include "SampleKeyEventHandler.h"
 
+#include "Font.h"
+
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
@@ -27,12 +29,12 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 #define SCENE_SECTION_OBJECTS 2
 #define SCENE_SECTION_MAP 3
 
-
 #define ASSETS_SECTION_UNKNOWN -1
 #define ASSETS_SECTION_SPRITES 1
 #define ASSETS_SECTION_ANIMATIONS 2
 
 #define MAX_SCENE_LINE 1024
+
 
 void CPlayScene::_ParseSection_SPRITES(string line)
 {
@@ -293,6 +295,13 @@ void CPlayScene::Render()
 	map->Render();
 	for (size_t i = 0; i < objects.size(); i++)
 		objects[i]->Render();
+
+	float cx, cy;
+	player->GetPosition(cx, cy);
+
+	CFont* font = new CFont();
+	vector<LPSPRITE> testSprites = font->StringToSprites("MARIO");
+	for (size_t i = 0; i < testSprites.size(); i++) testSprites[i]->Draw(cx + i*10, cy - 10);
 }
 
 /*
