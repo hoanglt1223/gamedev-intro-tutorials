@@ -296,12 +296,12 @@ void CPlayScene::Render()
 	for (size_t i = 0; i < objects.size(); i++)
 		objects[i]->Render();
 
-	float cx, cy;
-	player->GetPosition(cx, cy);
+	//float cx, cy;
+	//player->GetPosition(cx, cy);
 
-	CFont* font = new CFont();
-	vector<LPSPRITE> testSprites = font->StringToSprites("M");
-	for (size_t i = 0; i < testSprites.size(); i++) testSprites[i]->Draw(cx + i*10, cy - 20);
+	//CFont* font = new CFont();
+	//vector<LPSPRITE> testSprites = font->StringToSprites("M");
+	//for (size_t i = 0; i < testSprites.size(); i++) testSprites[i]->Draw(cx + i*10, cy - 20);
 }
 
 /*

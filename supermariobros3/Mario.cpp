@@ -17,8 +17,12 @@
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	vy += ay * dt;
 	vx += ax * dt;
+	vy += ay * dt;
+
+	//if (vy >= 0.25f) vy = 0.25f;
+	//if (vy <= -0.25f) vy = -0.25f;
+	DebugOut(L"vy: %f \n", vy);
 
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
 
@@ -167,7 +171,8 @@ int CMario::GetAniIdBig()
 	if (!isOnPlatform)
 	{
 		if (abs(ax) == MARIO_ACCEL_RUN_X) aniId = ID_ANI_MARIO_BIG_JUMP_RUN;
-		else aniId = ID_ANI_MARIO_BIG_JUMP_WALK;
+		else if (vy < 0) aniId = ID_ANI_MARIO_BIG_JUMP;
+		else aniId = ID_ANI_MARIO_BIG_JUMPED;
 	}
 	else
 		if (isSitting) aniId = ID_ANI_MARIO_BIG_SIT;
@@ -183,13 +188,41 @@ int CMario::GetAniIdBig()
 	return aniId;
 }
 
+//
+// Get animdation ID for Racoon Mario
+//
+int CMario::GetAniIdRacoon()
+{
+	int aniId = -1;
+	if (!isOnPlatform)
+	{
+		if (abs(ax) == MARIO_ACCEL_RUN_X) aniId = ID_ANI_MARIO_BIG_JUMP_RUN;
+		else if (vy < 0) aniId = ID_ANI_MARIO_RACOON_JUMP;
+		else aniId = ID_ANI_MARIO_RACOON_JUMPED;
+	}
+	else
+		if (isSitting) aniId = ID_ANI_MARIO_RACOON_SIT;
+		else if (vx == 0) aniId = ID_ANI_MARIO_RACOON_IDLE;
+		else if (ax * vx < 0) aniId = ID_ANI_MARIO_RACOON_BRACE;
+		else if (abs(ax) == MARIO_ACCEL_RUN_X)
+			aniId = ID_ANI_MARIO_RACOON_RUNNING;
+		else if (abs(ax) == MARIO_ACCEL_WALK_X)
+			aniId = ID_ANI_MARIO_RACOON_WALKING;
+
+	if (aniId == -1) aniId = ID_ANI_MARIO_RACOON_IDLE;
+
+	return aniId;
+}
+
 void CMario::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
 	int aniId = -1;
 
 	if (state == MARIO_STATE_DIE)
-		aniId = ID_ANI_MARIO_BIG_DIE;
+		aniId = ID_ANI_MARIO_DIE;
+	else if (level == MARIO_LEVEL_RACOON)
+		aniId = GetAniIdRacoon();
 	else if (level == MARIO_LEVEL_BIG)
 		aniId = GetAniIdBig();
 	else if (level == MARIO_LEVEL_SMALL)
@@ -283,7 +316,7 @@ void CMario::SetState(int state)
 
 void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (level == MARIO_LEVEL_BIG)
+	if (level == MARIO_LEVEL_BIG || level == MARIO_LEVEL_RACOON)
 	{
 		if (isSitting)
 		{
@@ -335,6 +368,6 @@ void CMario::Respawn()
 {
 	state = MARIO_STATE_IDLE;
 	SetState(MARIO_STATE_IDLE);
-	SetPosition(x, 200);
+	SetPosition(x < 20 ? 20 : x, 200);
 }
 
