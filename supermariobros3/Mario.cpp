@@ -13,8 +13,6 @@
 #include "Platform.h"
 #include "Collision.h"
 
-
-
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vx += ax * dt;
@@ -237,7 +235,7 @@ void CMario::Render()
 void CMario::SetState(int state)
 {
 	// DIE is the end state, cannot be changed! 
-	if (this->state == MARIO_STATE_DIE) return;
+	if (this->state == MARIO_STATE_DIE || CGame::GetInstance()->IsPaused()) return;
 
 	switch (state)
 	{

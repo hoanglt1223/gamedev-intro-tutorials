@@ -17,7 +17,8 @@ using namespace std;
 #define KEYBOARD_BUFFER_SIZE 1024
 #define KEYBOARD_STATE_SIZE 256
 
-
+#define SCREEN_WIDTH 256
+#define SCREEN_HEIGHT 240
 
 /*
 	Our simple game framework
@@ -29,6 +30,9 @@ class CGame
 
 	int backBufferWidth = 0;					// Backbuffer width & height, will be set during Direct3D initialization
 	int backBufferHeight = 0;
+
+	int screenWidth = SCREEN_WIDTH;
+	int screenHeight = SCREEN_HEIGHT;
 
 	ID3D10Device* pD3DDevice = NULL;
 	IDXGISwapChain* pSwapChain = NULL;
@@ -55,6 +59,7 @@ class CGame
 	unordered_map<int, LPSCENE> scenes;
 	int current_scene;
 	int next_scene = -1;
+	bool isPaused = false;
 
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_SCENES(string line);
@@ -98,6 +103,8 @@ public:
 
 	int GetBackBufferWidth() { return backBufferWidth; }
 	int GetBackBufferHeight() { return backBufferHeight; }
+	int GetScreenWidth() { return screenWidth; }
+	int GetScreenHeight() { return screenHeight; }
 
 	static CGame* GetInstance();
 
@@ -111,8 +118,11 @@ public:
 	void SwitchScene();
 	void InitiateSwitchScene(int scene_id);
 
-	void _ParseSection_TEXTURES(string line);
+	bool IsPaused() { return isPaused; }
+	void Pause() { isPaused = true; }
+	void Unpause() { isPaused = false; }
 
+	void _ParseSection_TEXTURES(string line);
 
 	~CGame();
 };

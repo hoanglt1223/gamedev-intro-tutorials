@@ -1,7 +1,5 @@
 #include "Map.h"
 
-#define SCREEN_WIDTH 320
-
 CMap::CMap(LPCWSTR path) {
 	std::ifstream f;
 	f.open(path);
@@ -51,7 +49,7 @@ void CMap::Render()
 	float cx, cy;
 	CGame::GetInstance()->GetCamPos(cx, cy);
 	int startColumn = (int)cx / tileWidth;
-	int endColumn = startColumn + (SCREEN_WIDTH / tileWidth);
+	int endColumn = startColumn + (CGame::GetInstance()->GetScreenWidth() / tileWidth);
 
 	for (int i = 0; i < mapRows; i++)
 		for (int j = startColumn; j <= endColumn; j++)

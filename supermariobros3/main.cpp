@@ -26,15 +26,14 @@
 
 #define BACKGROUND_COLOR D3DXCOLOR(200.0f/255, 200.0f/255, 255.0f/255, 0.0f)
 
-#define SCREEN_WIDTH 320
-#define SCREEN_HEIGHT 240
-
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message) {
 	case WM_DESTROY:
+	{
 		PostQuitMessage(0);
 		break;
+	}
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
@@ -169,11 +168,12 @@ int WINAPI WinMain(
 	_In_ LPSTR lpCmdLine,
 	_In_ int nCmdShow
 ) {
-	HWND hWnd = CreateGameWindow(hInstance, nCmdShow, SCREEN_WIDTH, SCREEN_HEIGHT);
+	LPGAME game = CGame::GetInstance();
+
+	HWND hWnd = CreateGameWindow(hInstance, nCmdShow, game->GetScreenWidth(), game->GetScreenHeight());
 
 	SetDebugWindow(hWnd);
 
-	LPGAME game = CGame::GetInstance();
 	game->Init(hWnd, hInstance);
 	game->InitKeyboard();
 
@@ -181,7 +181,10 @@ int WINAPI WinMain(
 	//IMPORTANT: this is the only place where a hardcoded file name is allowed ! 
 	game->Load(L"scenes\\mario.txt");  
 
-	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH*2, SCREEN_HEIGHT*2, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
+	SetWindowPos(hWnd, 0, 0, 0, 
+		game->GetScreenWidth(), 
+		game->GetScreenHeight(),
+		SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 
 	Run();
 

@@ -34,6 +34,10 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_R:
 		mario->Respawn();
 		break;
+	case DIK_P:
+		if (CGame::GetInstance()->IsPaused()) CGame::GetInstance()->Unpause();
+		else CGame::GetInstance()->Pause();
+		break;
 	}
 }
 
