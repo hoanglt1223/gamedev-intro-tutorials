@@ -216,6 +216,8 @@ void CPlayScene::LoadAssets(LPCWSTR assetFile)
 
 	f.close();
 
+	hud = new CHud();
+
 	DebugOut(L"[INFO] Done loading assets from %s\n", assetFile);
 }
 
@@ -287,7 +289,7 @@ void CPlayScene::Update(DWORD dt)
 
 	if (cx < 0) cx = 0;
 
-	CGame::GetInstance()->SetCamPos(cx, 222 /*cy*/);
+	CGame::GetInstance()->SetCamPos(cx, 248 /*cy*/);
 
 	PurgeDeletedObjects();
 }
@@ -295,8 +297,11 @@ void CPlayScene::Update(DWORD dt)
 void CPlayScene::Render()
 {
 	map->Render();
+
 	for (size_t i = 0; i < objects.size(); i++)
 		objects[i]->Render();
+
+	hud->Render();
 
 	//float cx, cy;
 	//player->GetPosition(cx, cy);

@@ -4,6 +4,8 @@
 // This file contains all IDs of game assets 
 //
 
+#define ID_TEX_BBOX -100		// special texture to draw object bounding box
+#define ID_TEX_BLACK -1
 #define ID_TEX_MARIO 0
 #define ID_TEX_ENEMY 10
 #define ID_TEX_MISC 20
@@ -27,6 +29,6 @@
 #define ID_SPRITE_COIN 40000
 
 #define ID_SPRITE_CLOUD 50000
-#define ID_SPRITE_CLOUD_BEGIN (ID_SPRITE_CLOUD+1000)
-#define ID_SPRITE_CLOUD_MIDDLE (ID_SPRITE_CLOUD+2000)
-#define ID_SPRITE_CLOUD_END (ID_SPRITE_CLOUD+3000)
+#define ID_SPRITE_CLOUD_BEGIN (ID_SPRITE_CLOUD + 1000)
+#define ID_SPRITE_CLOUD_MIDDLE (ID_SPRITE_CLOUD + 2000)
+#define ID_SPRITE_CLOUD_END (ID_SPRITE_CLOUD + 3000)

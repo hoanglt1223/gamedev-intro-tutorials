@@ -8,6 +8,8 @@
 #include "Animations.h"
 #include "PlayScene.h"
 
+#define BACKBUFFER_OFFSET 12
+
 CGame * CGame::__instance = NULL;
 
 /*
@@ -24,8 +26,8 @@ void CGame::Init(HWND hWnd, HINSTANCE hInstance)
 	RECT r;
 	GetClientRect(hWnd, &r);
 
-	backBufferWidth = r.right + 1;
-	backBufferHeight = r.bottom + 1;
+	backBufferWidth = r.right + BACKBUFFER_OFFSET; // to make it look like NES game screen
+	backBufferHeight = r.bottom + BACKBUFFER_OFFSET;
 
 	DebugOut(L"[INFO] Window's client area: width= %d, height= %d\n", r.right - 1, r.bottom - 1);
 

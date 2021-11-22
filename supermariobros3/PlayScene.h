@@ -8,6 +8,7 @@
 #include "Mario.h"
 #include "Goomba.h"
 #include "Koopas.h"
+#include "HUD.h"
 
 
 class CPlayScene: public CScene
@@ -18,6 +19,7 @@ protected:
 
 	vector<LPGAMEOBJECT> objects;
 	CMap* map = nullptr;
+	CHud* hud = nullptr;
 
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);

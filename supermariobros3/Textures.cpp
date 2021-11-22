@@ -22,7 +22,7 @@ void CTextures::Add(int id, LPCWSTR filePath)
 	textures[id] = CGame::GetInstance()->LoadTexture(filePath);
 }
 
-LPTEXTURE CTextures::Get(unsigned int i)
+LPTEXTURE CTextures::Get(int i)
 {
 	LPTEXTURE t = textures[i];
 	if (t == NULL)
