@@ -93,6 +93,8 @@
 
 #define MARIO_UNTOUCHABLE_TIME 2500
 
+#define MAX_POWER_METER 7
+
 class CMario : public CGameObject
 {
 	BOOLEAN isSitting;
@@ -104,6 +106,8 @@ class CMario : public CGameObject
 	ULONGLONG untouchable_start;
 	BOOLEAN isOnPlatform;
 	int coin; 
+	int powerMeter;
+	ULONGLONG powerTimer;
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopas(LPCOLLISIONEVENT e);
@@ -129,6 +133,8 @@ public:
 		untouchable_start = -1;
 		isOnPlatform = false;
 		coin = 0;
+		powerMeter = 0;
+		powerTimer = 0;
 	}
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();

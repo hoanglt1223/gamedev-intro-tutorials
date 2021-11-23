@@ -12,6 +12,7 @@
 #include "Mushroom.h"
 #include "Platform.h"
 #include "Collision.h"
+#include "PlayScene.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -20,9 +21,23 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	//if (vy >= 0.25f) vy = 0.25f;
 	//if (vy <= -0.25f) vy = -0.25f;
-	DebugOut(L"vy: %f \n", vy);
 
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
+
+	if (state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_RUNNING_RIGHT) {
+		powerMeter = (int) floor(abs(vx) / abs(maxVx) * MAX_POWER_METER);
+		if (abs(vx) > abs(maxVx)) powerMeter = MAX_POWER_METER;
+		powerTimer = 0;
+	}
+	else if (powerMeter > 0) {
+		powerTimer += dt;
+		if (powerTimer > 200 ) {
+			powerTimer -= 200;
+			powerMeter--;
+		}
+	}
+	((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetHUD()->SetPowerMeter(powerMeter);
+	
 
 	// reset untouchable timer if untouchable time has passed
 	if (GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME)

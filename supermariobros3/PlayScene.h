@@ -45,6 +45,7 @@ public:
 	void AddObject(LPGAMEOBJECT object) { objects.push_back(object);  };
 
 	static bool IsGameObjectDeleted(const LPGAMEOBJECT& o);
+	CHud* GetHUD() { return hud; }
 };
 
 typedef CPlayScene* LPPLAYSCENE;

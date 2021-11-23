@@ -36,6 +36,12 @@ void CHud::Render()
 	// Render power meter
 	for (int i = powerMeter; i < MAX_POWER_METER - 1; i++)
 		arrowEmpty->Draw(x + 58 + FONT_SIZE * i, y + offset_y - 5.5f);
+	if (powerMeter > 0) for (int i = 0; i < powerMeter && i < MAX_POWER_METER - 1; i++)
+		arrowFilled->Draw(x + 58 + FONT_SIZE * i, y + offset_y - 5.5f);
+
+	if (powerMeter < MAX_POWER_METER)
+		powerEmpty->Draw(x + 112 , y + offset_y - 5.5f);
+	else powerFilled->Draw(x + 112, y + offset_y - 5.5f);
 
 }
 
