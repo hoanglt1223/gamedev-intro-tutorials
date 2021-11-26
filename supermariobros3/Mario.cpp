@@ -19,31 +19,45 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vx += ax * dt;
 	vy += ay * dt;
 
-	//if (vy >= 0.25f) vy = 0.25f;
-	//if (vy <= -0.25f) vy = -0.25f;
 
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
 
 	if (state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_RUNNING_RIGHT) {
-		powerMeter = (int) floor(abs(vx) / abs(maxVx) * MAX_POWER_METER);
+		powerMeter = (int)floor(abs(vx) / abs(maxVx) * MAX_POWER_METER);
 		if (abs(vx) > abs(maxVx)) powerMeter = MAX_POWER_METER;
 		powerTimer = 0;
 	}
 	else if (powerMeter > 0) {
 		powerTimer += dt;
-		if (powerTimer > 200 ) {
+		if (powerTimer > 200) {
 			powerTimer -= 200;
 			powerMeter--;
 		}
 	}
 	((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetHUD()->SetPowerMeter(powerMeter);
-	
+
+	if (isAirborne)
+	{
+		vy /= 1.5f;
+	}
+
+	if (isFlying) {
+		if (flyTimer > 3000) isFlying = false;
+		flyTimer += dt;
+		vy = -0.125f;
+	}
+	else flyTimer = 0;
+
 
 	// reset untouchable timer if untouchable time has passed
 	if (GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
 	{
 		untouchable_start = 0;
 		untouchable = 0;
+	}
+
+	if (isOnPlatform) {
+		isAirborne = false;
 	}
 
 	isOnPlatform = false;
@@ -113,8 +127,8 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 		}
 		else Downgrade();
 	}
-	
-	else 
+
+	else
 	{
 		koopas->Downgrade();
 		koopas->SetDirection(this->nx);
@@ -221,6 +235,8 @@ int CMario::GetAniIdRacoon()
 			aniId = ID_ANI_MARIO_RACOON_RUNNING;
 		else if (abs(ax) == MARIO_ACCEL_WALK_X)
 			aniId = ID_ANI_MARIO_RACOON_WALKING;
+		else if (isAirborne) aniId = ID_ANI_MARIO_RACOON_AIRBORNE;
+		else if (isFlying) aniId = ID_ANI_MARIO_RACOON_FLYING;
 
 	if (aniId == -1) aniId = ID_ANI_MARIO_RACOON_IDLE;
 
@@ -312,9 +328,46 @@ void CMario::SetState(int state)
 		}
 		break;
 
+	case MARIO_STATE_AIRBORNE:
+		if (isOnPlatform) {
+			SetState(MARIO_STATE_IDLE);
+			break;
+		}
+		if (level == MARIO_LEVEL_RACOON)
+			isAirborne = true;
+		break;
+
+	case MARIO_STATE_AIRBORNE_RIGHT:
+		if (isSitting) break;
+		if (isOnPlatform) SetState(MARIO_STATE_JUMP);
+		if (level == MARIO_LEVEL_RACOON)
+		{
+			isAirborne = true;
+			if (isOnPlatform && IsPowerMaxed()) isFlying = true;
+		}
+		maxVx = MARIO_FLYING_SPEED;
+		ax = MARIO_ACCEL_FLY_X;
+		nx = 1;
+		break;
+
+	case MARIO_STATE_AIRBORNE_LEFT:
+		if (isSitting) break;
+		if (isOnPlatform) {
+			SetState(MARIO_STATE_WALKING_LEFT);
+			break;
+		}
+		if (level == MARIO_LEVEL_RACOON)
+			isAirborne = true;
+		maxVx = -MARIO_FLYING_SPEED;
+		ax = -MARIO_ACCEL_FLY_X;
+		nx = -1;
+		break;
+
 	case MARIO_STATE_IDLE:
 		ax = 0.0f;
 		vx = 0.0f;
+		isAirborne = false;
+		isFlying = false;
 		break;
 
 	case MARIO_STATE_DIE:

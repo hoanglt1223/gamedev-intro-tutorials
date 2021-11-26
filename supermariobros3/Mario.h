@@ -8,9 +8,11 @@
 
 #define MARIO_WALKING_SPEED		0.1f
 #define MARIO_RUNNING_SPEED		0.2f
+#define MARIO_FLYING_SPEED		0.1f
 
 #define MARIO_ACCEL_WALK_X	0.0005f
 #define MARIO_ACCEL_RUN_X	0.0007f
+#define MARIO_ACCEL_FLY_X	0.0008f
 
 #define MARIO_JUMP_SPEED_Y		0.5f
 #define MARIO_BIG_JUMP_SPEED_Y		0.6f
@@ -33,6 +35,10 @@
 
 #define MARIO_STATE_SIT				600
 #define MARIO_STATE_SIT_RELEASE		601
+
+#define MARIO_STATE_AIRBORNE		700
+#define MARIO_STATE_AIRBORNE_LEFT	701
+#define MARIO_STATE_AIRBORNE_RIGHT	702
 
 
 #pragma region ANIMATION_ID
@@ -63,6 +69,9 @@
 
 #define ID_ANI_MARIO_BIG_SIT 440
 #define ID_ANI_MARIO_RACOON_SIT 441
+
+#define ID_ANI_MARIO_RACOON_AIRBORNE 445
+#define ID_ANI_MARIO_RACOON_FLYING 446
 
 #define ID_ANI_MARIO_BIG_JUMPED 460
 #define ID_ANI_MARIO_RACOON_JUMPED 461
@@ -98,8 +107,11 @@
 class CMario : public CGameObject
 {
 	BOOLEAN isSitting;
+	BOOLEAN isAirborne;
+	BOOLEAN isFlying;
 	float maxVx;
-	float ax, ay;				// acceleration on x, y 
+	float ax, ay;				// acceleration on x, y
+	//float lastVx, lastVy;
 
 	int level; 
 	int untouchable; 
@@ -108,6 +120,7 @@ class CMario : public CGameObject
 	int coin; 
 	int powerMeter;
 	ULONGLONG powerTimer;
+	ULONGLONG flyTimer;
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopas(LPCOLLISIONEVENT e);
@@ -124,6 +137,8 @@ public:
 	CMario(float x, float y) : CGameObject(x, y)
 	{
 		isSitting = false;
+		isAirborne = false;
+		isFlying = false;
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
@@ -135,6 +150,7 @@ public:
 		coin = 0;
 		powerMeter = 0;
 		powerTimer = 0;
+		flyTimer = 0;
 	}
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
@@ -158,4 +174,5 @@ public:
 
 	void AddCoin() { coin++; }
 	void Respawn();
+	bool IsPowerMaxed() { return powerMeter == MAX_POWER_METER ? true : false; }
 };
