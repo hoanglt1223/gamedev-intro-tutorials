@@ -2,12 +2,15 @@
 [ASSETS]
 assets\mario.txt
 assets\brick.txt
+assets\piranhaPlant.txt
 assets\coin.txt
 assets\goomba.txt
 assets\cloud.txt
 assets\koopas.txt
 assets\mushroom.txt
+assets\pipe.txt
 assets\interface.txt
+
 [MAP]
 scenes\world-1-1.txt
 #
@@ -17,9 +20,9 @@ scenes\world-1-1.txt
 # See OBJECT_TYPE constants in AssetIDs.h
 
 # MARIO
-0	20	210
+0	1808	210
 
-# BRICKS
+# BRICKS #type
 1	176	352	1
 1	192	352	1
 1	224	304	1
@@ -65,7 +68,7 @@ scenes\world-1-1.txt
 5	3184	304	16	16	3	0	0	0	0
 5	3232	240	16	16	8	0	0	0	0
 5	3008	240	16	16	12	0	0	0	0
-
+#block
 5	240	368	16	16	3	1	0	0	0	0
 5	272	336	16	16	3	1	0	0	0	0
 
@@ -84,9 +87,23 @@ scenes\world-1-1.txt
 5	1312	144	16	16	3	1	0	0	0	0
 5	1408	192	16	16	3	1	0	0	0	0
 5	1488	176	16	16	3	1	0	0	0	0
+#pipe 
+5	350	370	16	16	2	0	0	0	0	0
+5	350	387	16	16	2	2	0	0	0	0
+5	350	402	16	16	2	0	0	0	0	0
 
+5	1782	402	16	16	2	3	0	0	0	0
+5	1782	385	16	16	2	0	0	0	0	0
 
+5	1852	370	16	16	2	0	0	0	0	0
+5	1852	387	16	16	2	2	0	0	0	0
+5	1852	402	16	16	2	0	0	0	0	0
 
 #Portal 
 50	300	120	316	160	2
 
+# === PiranhaPlant ===
+7	1790	388		
+# === Fire PiranhaPlant ===
+70	358	380	1	
+70	1860	376	0	

@@ -31,21 +31,38 @@ void CPlatform::RenderBoundingBox()
 void CPlatform::Render()
 {
 	RenderBoundingBox();
+	CAnimations* animations = CAnimations::GetInstance();
+	CSprites* s = CSprites::GetInstance();
+	float xx = x;
+	int diff_x = 8;
+	int diff_y = 2;
+	int diff_y1 = 10;
 
-	if (length <= 0) return; 
+
+	if (length <= 0) return;
 	if (type == PLATFORM_GROUND) return;
-	float xx = x; 
-	CSprites * s = CSprites::GetInstance();
-
-	s->Get(this->spriteIdBegin)->Draw(xx, y);
-	xx += this->cellWidth;
-	for (int i = 1; i < this->length - 1; i++)
+	switch (type)
 	{
-		s->Get(this->spriteIdMiddle)->Draw(xx, y);
+	case PLATFORM_GROUND:
+		break;
+	case PLATFORM_PIPE_HIGH:
+		animations->Get(PLATFORM_ANI_PIPE_HIGH)->Render(x + diff_x, y - diff_y);
+		break;
+	case PLATFORM_PIPE:
+		animations->Get(PLATFORM_ANI_PIPE)->Render(x + diff_x, y - diff_y1);
+		break;
+	default:
+		s->Get(this->spriteIdBegin)->Draw(xx, y);
 		xx += this->cellWidth;
+		for (int i = 1; i < this->length - 1; i++)
+		{
+			s->Get(this->spriteIdMiddle)->Draw(xx, y);
+			xx += this->cellWidth;
+		}
+		if (length > 1)
+			s->Get(this->spriteIdEnd)->Draw(xx, y);
+		break;
 	}
-	if (length > 1)
-		s->Get(this->spriteIdEnd)->Draw(xx, y);
 }
 
 void CPlatform::GetBoundingBox(float& l, float& t, float& r, float& b)

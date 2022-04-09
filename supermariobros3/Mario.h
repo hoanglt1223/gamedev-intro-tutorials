@@ -113,11 +113,11 @@ class CMario : public CGameObject
 	float ax, ay;				// acceleration on x, y
 	//float lastVx, lastVy;
 
-	int level; 
-	int untouchable; 
+	int level;
+	int untouchable;
 	ULONGLONG untouchable_start;
 	BOOLEAN isOnPlatform;
-	int coin; 
+	int coin;
 	int powerMeter;
 	ULONGLONG powerTimer;
 	ULONGLONG flyTimer;
@@ -141,7 +141,7 @@ public:
 		isFlying = false;
 		maxVx = 0.0f;
 		ax = 0.0f;
-		ay = MARIO_GRAVITY; 
+		ay = MARIO_GRAVITY;
 
 		level = MARIO_LEVEL_SMALL;
 		untouchable = 0;
@@ -157,20 +157,28 @@ public:
 	virtual void SetState(int state);
 
 	virtual int IsCollidable()
-	{ 
-		return (state != MARIO_STATE_DIE); 
+	{
+		return (state != MARIO_STATE_DIE);
 	}
 
-	virtual int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable==0); }
+	virtual int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable == 0); }
 
 	virtual void OnNoCollision(DWORD dt);
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 
 	virtual void SetLevel(int l);
+	int GetLevel() {
+		return this->level;
+	}
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Downgrade();
+
+	void GetXandY(float& x, float& y) {
+		x = this->x;
+		y = this->y;
+	}
 
 	void AddCoin() { coin++; }
 	void Respawn();
