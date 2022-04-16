@@ -2,6 +2,7 @@
 #include "Mario.h"
 #include "Mushroom.h"
 #include "PlayScene.h"
+#include "Coin.h"
 
 CBrick::CBrick(float x, float y, int type) : CGameObject(x, y)
 {
@@ -41,7 +42,11 @@ void CBrick::Hit()
 	{
 	case BRICK_COIN:
 	{
+		LPSCENE scene = CGame::GetInstance()->GetCurrentScene();
 		CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+		CGameObject* m = new CCoin(x, y);
+		((LPPLAYSCENE)scene)->AddObject(m);
+		m->SetState(COIN_STATE_UP);
 		mario->AddCoin();
 		break;
 	}
