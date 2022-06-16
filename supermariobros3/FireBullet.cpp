@@ -45,11 +45,11 @@ void FireBullet::Render()
 {
 	int aniId = 0;
 	if (vx > 0)
-		aniId = BULLET_ANI_RIGHT;
+		aniId = BULLET_ANI_RIGHT_ID;
 	else
-		aniId = BULLET_ANI_LEFT;
+		aniId = BULLET_ANI_LEFT_ID;
 	CAnimations::GetInstance()->Get(aniId)->Render(nx, x, y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void FireBullet::GetBoundingBox(float& l, float& t, float& r, float& b)

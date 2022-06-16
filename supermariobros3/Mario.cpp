@@ -10,6 +10,8 @@
 #include "Koopas.h"
 #include "Brick.h"
 #include "Mushroom.h"
+#include "PiranhaPlant.h"
+#include "PiranhaPlantFire.h"
 #include "Platform.h"
 #include "Collision.h"
 #include "PlayScene.h"
@@ -92,6 +94,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithBrick(e);
 	else if (dynamic_cast<CMushroom*>(e->obj))
 		OnCollisionWithMushroom(e);
+	else if (dynamic_cast<PiranhaPlant*> (e->obj) || dynamic_cast<PiranhaPlantFire*> (e->obj))
+		OnCollisionWithPiranhaPlant(e);
+	else if (dynamic_cast<FireBullet*>(e->obj))
+		OnCollisionWithFireBullet(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -161,6 +167,16 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 	SetLevel(MARIO_LEVEL_BIG);
 	CMushroom* m = (CMushroom*)e->obj;
 	m->Delete();
+}
+
+void CMario::OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e)
+{
+	Downgrade();
+}
+
+void CMario::OnCollisionWithFireBullet(LPCOLLISIONEVENT e) {
+	e->obj->Delete();
+	Downgrade();
 }
 
 //
@@ -402,7 +418,7 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
 				right = left + MARIO_BIG_BBOX_WIDTH + diffRight;
 				bottom = top + MARIO_BIG_BBOX_HEIGHT;
 			}
-			else 
+			else
 			{
 				left = x - MARIO_BIG_BBOX_WIDTH / 2;
 				top = y - MARIO_BIG_BBOX_HEIGHT / 2;

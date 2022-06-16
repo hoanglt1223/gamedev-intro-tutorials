@@ -7,8 +7,9 @@ assets\goomba.txt
 assets\cloud.txt
 assets\koopas.txt
 assets\mushroom.txt
-assets\pipe.txt
 assets\piranhaPlant.txt
+assets\pipe.txt
+assets\bullet.txt
 assets\interface.txt
 
 [MAP]
@@ -20,7 +21,7 @@ scenes\world-1-1.txt
 # See OBJECT_TYPE constants in AssetIDs.h
 
 # MARIO
-0	1808	210
+0	120	210
 
 # BRICKS #type
 1	176	352	1
@@ -43,7 +44,7 @@ scenes\world-1-1.txt
 3	550	300
 
 # === PiranhaPlant ===
-4	1790	388		
+4	1790	392		
 # === Fire PiranhaPlant ===
 70	358	380	1	
 70	1860	376	0	

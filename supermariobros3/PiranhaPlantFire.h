@@ -38,7 +38,7 @@
 
 #define BULLET_ANI_SET_ID		9
 
-class PiranhaPlantFire : public CGameObject
+class PiranhaPlantFire : public PiranhaPlant
 
 {
 	ULONGLONG shooting_start = 0;

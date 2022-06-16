@@ -13,8 +13,8 @@ void PiranhaPlant::GetBoundingBox(float& left, float& top,
 
 PiranhaPlant::PiranhaPlant(float x, float y) : CGameObject(x, y)
 {
-	//SetState(PIRANHAPLANT_STATE_INACTIVE);
-	SetState(PIRANHAPLANT_STATE_DARTING);
+	SetState(PIRANHAPLANT_STATE_INACTIVE);
+	//SetState(PIRANHAPLANT_STATE_DARTING);
 }
 
 PiranhaPlant::PiranhaPlant()
@@ -45,9 +45,29 @@ void PiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	{
 		if (y == limitY)
 			vy = PIRANHAPLANT_DARTING_SPEED;
-		//vy = 0;
 		biting_start = 0;
 	}
+
+	vector<LPCOLLISIONEVENT> coEvents;
+	vector<LPCOLLISIONEVENT> coEventsResult;
+
+	coEvents.clear();
+	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+
+	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	if (mario != NULL) {
+		float mLeft, mTop, mRight, mBottom;
+		mario->GetBoundingBox(mLeft, mTop, mRight, mBottom);
+		float mWidth = mRight - mLeft;
+		float xMario, yMario;
+		mario->GetXandY(xMario, yMario);
+
+		if ((floor(xMario) + (float)mWidth + PIRANHAPLANT_ACTIVE_RANGE <= x
+			|| ceil(xMario) >= x + PIRANHAPLANT_BBOX_WIDTH + PIRANHAPLANT_ACTIVE_RANGE)
+			&& state == PIRANHAPLANT_STATE_INACTIVE && biting_start == 0)
+			SetState(PIRANHAPLANT_STATE_DARTING);
+	}
+
 }
 
 void PiranhaPlant::Render()
@@ -67,7 +87,6 @@ void PiranhaPlant::SetState(int _state)
 	{
 	case PIRANHAPLANT_STATE_DARTING:
 		vy = -PIRANHAPLANT_DARTING_SPEED;
-		//SetType(MOVING);
 		break;
 	case PIRANHAPLANT_STATE_BITING:
 		vy = 0;

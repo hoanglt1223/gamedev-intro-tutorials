@@ -2,6 +2,7 @@
 #include "Collision.h"
 #include "Platform.h"
 #include "debug.h"
+#include "PlayScene.h"
 
 CKoopas::CKoopas(float x, float y) : CGameObject(x, y)
 {
@@ -117,7 +118,8 @@ void CKoopas::SetState(int state)
 		vx = 0;
 		break;
 	case KOOPAS_STATE_ROLLING:
-		vx = -KOOPAS_ROLLING_SPEED * nx;
+		CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+		vx = -KOOPAS_ROLLING_SPEED * mario->GetDirectionX();
 		break;
 	}
 }

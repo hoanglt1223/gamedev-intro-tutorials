@@ -38,11 +38,12 @@ public:
 	void GetSpeed(float& vx, float& vy) { vx = this->vx; vy = this->vy; }
 
 	int GetState() { return this->state; }
+	int GetDirectionX() { return this->nx; }
 	virtual void Delete() { isDeleted = true; }
 	bool IsDeleted() { return isDeleted; }
 	int GetDirection() { return this->nx; }
 	void SetDirection(int nx) { this->nx = nx; }
-
+	
 	void RenderBoundingBox();
 
 	CGameObject();

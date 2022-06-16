@@ -6,7 +6,7 @@ PiranhaPlantFire::PiranhaPlantFire()
 {
 }
 
-PiranhaPlantFire::PiranhaPlantFire(float x, float y, int tag) :CGameObject(x, y) {
+PiranhaPlantFire::PiranhaPlantFire(float x, float y, int tag) :PiranhaPlant(x, y) {
 
 	this->tag = tag;
 	SetState(PIRANHAPLANT_STATE_INACTIVE);
@@ -88,6 +88,35 @@ void PiranhaPlantFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 			vy = PIRANHAPLANT_DARTING_SPEED;
 	}
 
+	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	if (mario != NULL) {
+		float mLeft, mTop, mRight, mBottom;
+		mario->GetBoundingBox(mLeft, mTop, mRight, mBottom);
+		float mWidth = mRight - mLeft;
+		float xMario, yMario;
+		mario->GetXandY(xMario, yMario);
+	/*	if ((floor(xMario) + (float)mWidth + PIRANHAPLANT_ACTIVE_RANGE <= x
+			|| ceil(xMario) >= x + PIRANHAPLANT_BBOX_WIDTH + PIRANHAPLANT_ACTIVE_RANGE)
+			&& state == PIRANHAPLANT_STATE_INACTIVE && delay_start == 0)
+			SetState(PIRANHAPLANT_STATE_DARTING);*/
+			//! 60 is red piranha active zone
+		if (x - 60 <= floor(xMario)
+			&& floor(xMario) + (float)mWidth <= x
+			&& state == PIRANHAPLANT_STATE_INACTIVE && delay_start == 0
+			&& !isMarioInActiveZone
+			|| floor(xMario) > x && floor(xMario) < x + PIRANHAPLANT_BBOX_WIDTH + 60
+			&& state == PIRANHAPLANT_STATE_INACTIVE && delay_start == 0
+			&& !isMarioInActiveZone)
+		{
+			SetState(PIRANHAPLANT_STATE_DARTING);
+			isMarioInActiveZone = true;
+		}
+		if (floor(xMario) < x - 60 || floor(xMario) > x + PIRANHAPLANT_BBOX_WIDTH + 60) {
+			isMarioInActiveZone = false;
+		}
+	
+	}
+
 }
 
 
@@ -126,23 +155,25 @@ void PiranhaPlantFire::GetDirect() {
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 
 	int mHeight;
-	float x, y;
-	mario->GetXandY(x, y);
+	float xMario, yMario;
+	mario->GetXandY(xMario, yMario);
 	if (mario->GetLevel() == MARIO_LEVEL_SMALL)
 		mHeight = MARIO_SMALL_BBOX_HEIGHT;
 	else
 		mHeight = MARIO_BIG_BBOX_HEIGHT;
 
-	if (y + mHeight < limitY + BBHeight)
+	if (yMario + mHeight < limitY + BBHeight)
 		Up = true;
 	else
 		Up = false;
-	if (x <= x)
+	if (xMario <= x)
 		Right = false;
 	else
 		Right = true;
 };
 
 void PiranhaPlantFire::Shoot() {
-
+	CPlayScene* currentScene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+	this->bullet = new FireBullet(x, y, Up, Right);
+	currentScene->AddObject(bullet);
 }

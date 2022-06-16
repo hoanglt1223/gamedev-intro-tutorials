@@ -7,8 +7,8 @@
 #define BULLET_SPEED_Y	0.05f
 
 
-#define BULLET_ANI_RIGHT		90
-#define BULLET_ANI_LEFT			91	
+#define BULLET_ANI_RIGHT_ID		90
+#define BULLET_ANI_LEFT_ID		91	
 
 #define BULLET_ANI_SET_ID		9
 class FireBullet :
