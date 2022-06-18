@@ -5,6 +5,7 @@
 #include "PlayScene.h"
 #include "PiranhaPlant.h"
 #include "PiranhaPlantFire.h"
+#include "Goomba.h"
 
 CKoopas::CKoopas(float x, float y) : CGameObject(x, y)
 {
@@ -34,25 +35,32 @@ void CKoopas::GetBoundingBox(float& left, float& top, float& right, float& botto
 
 void CKoopas::OnNoCollision(DWORD dt)
 {
-		x += vx * dt;
-		y += vy * dt;
+	x += vx * dt;
+	y += vy * dt;
 
 }
 
 void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (!e->obj->IsBlocking()) return;
-	if (dynamic_cast<CKoopas*>(e->obj)) return;
+	if (dynamic_cast<CGoomba*>(e->obj))
+		OnCollisionWithGoomba(e);
+
 	if (dynamic_cast<CPlatform*>(e->obj))
 	{
 		OnCollisionWithPlatform(e);
 	}
+
 	if (dynamic_cast<CBrick*>(e->obj))
 		OnCollisionWithBrick(e);
-	if (dynamic_cast<CGoomba*>(e->obj))
-		OnCollisionWithGoomba(e);
+
 	if (dynamic_cast<PiranhaPlant*>(e->obj) || dynamic_cast<PiranhaPlantFire*>(e->obj))
 		OnCollisionWithPlan(e);
+	
+	if (!e->obj->IsBlocking() ) return;
+
+	if (dynamic_cast<CKoopas*>(e->obj)) return;
+	
+	
 
 	if (e->ny != 0)
 	{
@@ -90,12 +98,9 @@ void CKoopas::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 
 void CKoopas::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
-	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
-
-	if (this->GetState() == KOOPAS_STATE_ROLLING)
-	{
-		goomba->SetState(GOOMBA_STATE_DIE);
-		vy = -MARIO_JUMP_DEFLECT_SPEED;
+	CGoomba* goomba = (CGoomba*)e->obj;
+	if (e->nx != 0 && this->state == KOOPAS_STATE_ROLLING) {
+		goomba->Downgrade();
 	}
 }
 
@@ -175,4 +180,6 @@ void CKoopas::Downgrade()
 		SetState(KOOPAS_STATE_STOMPED);
 	else if (state == KOOPAS_STATE_STOMPED)
 		SetState(KOOPAS_STATE_ROLLING);
+	else if (state == KOOPAS_STATE_ROLLING)
+		SetState(KOOPAS_STATE_STOMPED);
 }
