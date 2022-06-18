@@ -15,6 +15,7 @@
 #include "Platform.h"
 #include "Collision.h"
 #include "PlayScene.h"
+#include "Leaf.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -98,6 +99,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPiranhaPlant(e);
 	else if (dynamic_cast<FireBullet*>(e->obj))
 		OnCollisionWithFireBullet(e);
+	else if (dynamic_cast<CLeaf*>(e->obj))
+		OnCollisionWithLeaf(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -118,6 +121,11 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 		if (goomba->GetState() != GOOMBA_STATE_DIE)
 			Downgrade();
 	}
+}
+
+void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e) {
+	e->obj->Delete();
+	this->SetLevel(MARIO_LEVEL_RACOON);
 }
 
 void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)

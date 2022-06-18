@@ -22,6 +22,7 @@
 #define BRICK_STATE_DEFAULT 0 
 #define BRICK_STATE_EMPTY 1
 
+
 #define TYPE
 class CBrick : public CGameObject {
 	int type;

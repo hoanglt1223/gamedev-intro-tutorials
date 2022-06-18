@@ -3,6 +3,7 @@
 #include "Mushroom.h"
 #include "PlayScene.h"
 #include "Coin.h"
+#include "Leaf.h"
 
 CBrick::CBrick(float x, float y, int type) : CGameObject(x, y)
 {
@@ -18,15 +19,15 @@ void CBrick::Render()
 
 	int aniId = ID_ANI_BRICK_QUESTION_MARK;
 	if (state == BRICK_STATE_EMPTY) aniId = ID_ANI_BRICK_QUESTION_EMPTY;
-	
+
 	animations->Get(aniId)->Render(x, y);
 	//RenderBoundingBox();
 }
 
-void CBrick::GetBoundingBox(float &l, float &t, float &r, float &b)
+void CBrick::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-	l = x - BRICK_BBOX_WIDTH/2;
-	t = y - BRICK_BBOX_HEIGHT/2;
+	l = x - BRICK_BBOX_WIDTH / 2;
+	t = y - BRICK_BBOX_HEIGHT / 2;
 	r = l + BRICK_BBOX_WIDTH;
 	b = t + BRICK_BBOX_HEIGHT;
 }
@@ -52,8 +53,17 @@ void CBrick::Hit()
 	}
 	case BRICK_POWER_UP:
 	{
+		CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 		LPSCENE scene = CGame::GetInstance()->GetCurrentScene();
-		CGameObject* m = new CMushroom(x, y - MUSHROOM_GROWING_HEIGHT, MUSHROOM_POWERUP);
+		CGameObject* m = nullptr;
+		if (mario->GetLevel() == MARIO_LEVEL_SMALL) {
+			m = new CMushroom(x, y - MUSHROOM_GROWING_HEIGHT, MUSHROOM_POWERUP);
+		}
+		if (mario->GetLevel() == MARIO_LEVEL_BIG) {
+			m = new CLeaf();
+			m->SetPosition(x, y);
+			m->SetState(LEAF_STATE_UP);
+		}
 		((LPPLAYSCENE)scene)->AddObject(m);
 		break;
 	}

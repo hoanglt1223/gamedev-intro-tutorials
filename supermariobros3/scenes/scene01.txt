@@ -11,6 +11,7 @@ assets\piranhaPlant.txt
 assets\pipe.txt
 assets\bullet.txt
 assets\interface.txt
+assets\leaf.txt
 
 [MAP]
 scenes\world-1-1.txt
