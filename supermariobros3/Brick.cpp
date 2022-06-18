@@ -59,7 +59,7 @@ void CBrick::Hit()
 		if (mario->GetLevel() == MARIO_LEVEL_SMALL) {
 			m = new CMushroom(x, y - MUSHROOM_GROWING_HEIGHT, MUSHROOM_POWERUP);
 		}
-		if (mario->GetLevel() == MARIO_LEVEL_BIG) {
+		if (mario->GetLevel() == MARIO_LEVEL_BIG || mario->GetLevel() == MARIO_LEVEL_RACOON) {
 			m = new CLeaf();
 			m->SetPosition(x, y);
 			m->SetState(LEAF_STATE_UP);

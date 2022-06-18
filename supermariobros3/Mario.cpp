@@ -39,6 +39,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetHUD()->SetPowerMeter(powerMeter);
 
+
+
 	if (isAirborne)
 	{
 		vy /= 1.5f;
@@ -49,7 +51,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		flyTimer += dt;
 		vy = -0.125f;
 	}
-	else flyTimer = 0;
+	else {
+		flyTimer = 0;
+		ay = MARIO_GRAVITY;
+	}
 
 
 	// reset untouchable timer if untouchable time has passed
@@ -247,9 +252,11 @@ int CMario::GetAniIdRacoon()
 	int aniId = -1;
 	if (!isOnPlatform)
 	{
-		if (abs(ax) == MARIO_ACCEL_RUN_X) aniId = ID_ANI_MARIO_BIG_JUMP_RUN;
+		if (abs(ax) == MARIO_ACCEL_RUN_X) aniId = ID_ANI_MARIO_RACOON_JUMP_RUN;
 		else if (vy < 0) aniId = ID_ANI_MARIO_RACOON_JUMP;
 		else aniId = ID_ANI_MARIO_RACOON_JUMPED;
+		if (isFlying)
+			aniId = ID_ANI_MARIO_RACOON_FLYING;
 	}
 	else
 		if (isSitting) aniId = ID_ANI_MARIO_RACOON_SIT;
@@ -363,12 +370,18 @@ void CMario::SetState(int state)
 
 	case MARIO_STATE_AIRBORNE_RIGHT:
 		if (isSitting) break;
-		if (isOnPlatform) SetState(MARIO_STATE_JUMP);
 		if (level == MARIO_LEVEL_RACOON)
 		{
 			isAirborne = true;
-			if (isOnPlatform && IsPowerMaxed()) isFlying = true;
+			if (isOnPlatform && IsPowerMaxed()) 
+			{
+				isFlying = true;
+				isOnPlatform = false;
+			}
+
 		}
+		if (isOnPlatform)
+			SetState(MARIO_STATE_JUMP);
 		maxVx = MARIO_FLYING_SPEED;
 		ax = MARIO_ACCEL_FLY_X;
 		nx = 1;
@@ -376,12 +389,17 @@ void CMario::SetState(int state)
 
 	case MARIO_STATE_AIRBORNE_LEFT:
 		if (isSitting) break;
-		if (isOnPlatform) {
-			SetState(MARIO_STATE_WALKING_LEFT);
-			break;
-		}
 		if (level == MARIO_LEVEL_RACOON)
+		{
 			isAirborne = true;
+			if (isOnPlatform && IsPowerMaxed())
+			{
+				isFlying = true;
+				isOnPlatform = false;
+			}
+		}
+		if (isOnPlatform)
+			SetState(MARIO_STATE_JUMP);
 		maxVx = -MARIO_FLYING_SPEED;
 		ax = -MARIO_ACCEL_FLY_X;
 		nx = -1;
@@ -461,6 +479,7 @@ void CMario::Downgrade()
 	if (level > MARIO_LEVEL_SMALL)
 	{
 		level = MARIO_LEVEL_SMALL;
+		vy = MARIO_GRAVITY;
 		StartUntouchable();
 	}
 	else SetState(MARIO_STATE_DIE);

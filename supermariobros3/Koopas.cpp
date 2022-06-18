@@ -3,6 +3,8 @@
 #include "Platform.h"
 #include "debug.h"
 #include "PlayScene.h"
+#include "PiranhaPlant.h"
+#include "PiranhaPlantFire.h"
 
 CKoopas::CKoopas(float x, float y) : CGameObject(x, y)
 {
@@ -45,6 +47,12 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 	{
 		OnCollisionWithPlatform(e);
 	}
+	if (dynamic_cast<CBrick*>(e->obj))
+		OnCollisionWithBrick(e);
+	if (dynamic_cast<CGoomba*>(e->obj))
+		OnCollisionWithGoomba(e);
+	if (dynamic_cast<PiranhaPlant*>(e->obj) || dynamic_cast<PiranhaPlantFire*>(e->obj))
+		OnCollisionWithPlan(e);
 
 	if (e->ny != 0)
 	{
@@ -55,6 +63,43 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 		vx = -vx;
 	}
 }
+
+void CKoopas::OnCollisionWithPlan(LPCOLLISIONEVENT e) {
+
+	PiranhaPlant* piranhaPlant = dynamic_cast<PiranhaPlant*>(e->obj);
+	PiranhaPlantFire* piranhaPlantFire = dynamic_cast<PiranhaPlantFire*>(e->obj);
+
+	if ((piranhaPlant->GetState() != PIRANHAPLANT_STATE_DEATH ||
+		piranhaPlantFire->GetState() != PIRANHAPLANT_STATE_DEATH) &&
+		this->GetState() == KOOPAS_STATE_ROLLING);
+	{
+		piranhaPlant->SetState(PIRANHAPLANT_STATE_DEATH);
+		piranhaPlantFire->SetState(PIRANHAPLANT_STATE_DEATH);
+
+	}
+
+}
+
+void CKoopas::OnCollisionWithBrick(LPCOLLISIONEVENT e)
+{
+	CBrick* b = (CBrick*)e->obj;
+	if (e->nx != 0) {
+		b->Hit();
+	}
+}
+
+void CKoopas::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
+{
+	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+
+	if (this->GetState() == KOOPAS_STATE_ROLLING)
+	{
+		goomba->SetState(GOOMBA_STATE_DIE);
+		vy = -MARIO_JUMP_DEFLECT_SPEED;
+	}
+}
+
+
 
 void CKoopas::OnCollisionWithPlatform(LPCOLLISIONEVENT e)
 {
@@ -119,7 +164,7 @@ void CKoopas::SetState(int state)
 		break;
 	case KOOPAS_STATE_ROLLING:
 		CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-		vx = -KOOPAS_ROLLING_SPEED * mario->GetDirectionX();
+		vx = KOOPAS_ROLLING_SPEED * mario->GetDirectionX();
 		break;
 	}
 }

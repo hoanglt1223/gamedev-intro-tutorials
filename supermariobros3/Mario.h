@@ -65,7 +65,7 @@
 
 #define ID_ANI_MARIO_SMALL_JUMP_RUN 408
 #define ID_ANI_MARIO_BIG_JUMP_RUN 460
-#define ID_ANI_MARIO_RACOON_JUMP_RUN 460
+#define ID_ANI_MARIO_RACOON_JUMP_RUN 461
 
 #define ID_ANI_MARIO_BIG_SIT 440
 #define ID_ANI_MARIO_RACOON_SIT 441
@@ -122,6 +122,7 @@ class CMario : public CGameObject
 	ULONGLONG powerTimer;
 	ULONGLONG flyTimer;
 
+
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopas(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
@@ -136,6 +137,9 @@ class CMario : public CGameObject
 	int GetAniIdRacoon();
 
 public:
+	BOOLEAN isHolding = false;
+	BOOLEAN isReadyToHold = false;
+
 	CMario(float x, float y) : CGameObject(x, y)
 	{
 		isSitting = false;
