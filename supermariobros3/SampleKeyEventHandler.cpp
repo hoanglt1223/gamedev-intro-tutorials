@@ -103,10 +103,15 @@ void CSampleKeyHandler::KeyState(BYTE* states)
 	}*/
 	else if (game->IsKeyDown(DIK_LEFT))
 	{
-		if (game->IsKeyDown(DIK_A))
+		if (game->IsKeyDown(DIK_A)) {
+			mario->isReadyToHold = true;
 			mario->SetState(MARIO_STATE_RUNNING_LEFT);
-		else
+		}
+		else {
+			mario->isReadyToHold = false;
+			mario->isHolding = false;
 			mario->SetState(MARIO_STATE_WALKING_LEFT);
+		}
 	}
 	else
 		mario->SetState(MARIO_STATE_IDLE);

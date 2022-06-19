@@ -39,7 +39,12 @@ protected:
 	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithPlan(LPCOLLISIONEVENT e);
+
+	void HandleBeingHeld(LPGAMEOBJECT player);
 public:
+	bool isBeingHeld = false;
+	void SetIsBeingHeld(bool m) { isBeingHeld = m; };
+	
 	CKoopas(float x, float y);
 	virtual void SetState(int state);
 	virtual void Downgrade();

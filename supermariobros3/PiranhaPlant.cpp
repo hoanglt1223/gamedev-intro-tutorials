@@ -72,12 +72,12 @@ void PiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 void PiranhaPlant::Render()
 {
-	int aniId = PIRANHAPLANT_ANI_DEATH;
+	/*int aniId = -1;
 	if (state != PIRANHAPLANT_STATE_DEATH && dying_start == 0)
 		aniId = PIRANHAPLANT_ANI_DARTING;
 	CAnimations::GetInstance()->Get(aniId)->Render(nx, x, y);
 
-	RenderBoundingBox();
+	RenderBoundingBox();*/
 }
 
 void PiranhaPlant::SetState(int _state)

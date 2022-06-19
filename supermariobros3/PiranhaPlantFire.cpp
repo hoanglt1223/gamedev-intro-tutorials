@@ -14,7 +14,7 @@ PiranhaPlantFire::PiranhaPlantFire(float x, float y, int tag) :PiranhaPlant(x, y
 
 void PiranhaPlantFire::Render()
 {
-	int aniId = PIRANHAPLANT_ANI_DEATH;
+	/*int aniId = PIRANHAPLANT_ANI_DEATH;
 	if (state != PIRANHAPLANT_STATE_DEATH && dying_start == 0)
 	{
 		if (tag == 1)
@@ -44,7 +44,7 @@ void PiranhaPlantFire::Render()
 		}
 	}
 	CAnimations::GetInstance()->Get(aniId)->Render(nx, x, y);
-	RenderBoundingBox();
+	RenderBoundingBox();*/
 }
 
 void PiranhaPlantFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {

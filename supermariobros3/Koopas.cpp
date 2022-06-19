@@ -125,6 +125,7 @@ void CKoopas::OnCollisionWithPlatform(LPCOLLISIONEVENT e)
 
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	vy += ay * dt;
 	vx += ax * dt;
 
@@ -134,9 +135,41 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//	return;
 	//}
 
-
+	HandleBeingHeld(mario);
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
+}
+
+void CKoopas::HandleBeingHeld(LPGAMEOBJECT player) {
+
+	CMario* mario = dynamic_cast<CMario*>(player);
+	int mNx = mario->GetDirection();
+	float mx, my;
+	mario->GetPosition(mx, my);
+
+	if (isBeingHeld && mario->isHolding) {
+		if (state == KOOPAS_STATE_STOMPED) {
+			if (mNx > 0) {
+				x = mx + MARIO_BIG_BBOX_WIDTH * mNx - 3.0f;
+			}
+			else x = mx + MARIO_BIG_BBOX_WIDTH * mNx;
+			if (mario->GetLevel() != MARIO_LEVEL_SMALL) {
+				y = my - 2.0f;
+			}
+			else {
+				y = my - 2.0f;
+			}
+			vy = 0;
+		}
+	}
+	else if (isBeingHeld && !mario->isHolding) {
+		if (state == KOOPAS_STATE_STOMPED) {
+			this->nx = mario->GetDirection();
+			isBeingHeld = false;
+			//mario->StartKicking();
+			SetState(KOOPAS_STATE_ROLLING);
+		}
+	}
 }
 
 void CKoopas::Render()

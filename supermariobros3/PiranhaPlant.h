@@ -15,7 +15,7 @@
 #define PIRANHAPLANT_ACTIVE_RANGE			20
 
 #define PIRANHAPLANT_ANI_DARTING			700000
-#define PIRANHAPLANT_ANI_DEATH				710000	// cái này chưa có, để tạm
+//#define PIRANHAPLANT_ANI_DEATH				710000	// cái này chưa có, để tạm
 
 #define PIRANHAPLANT_BITING_TIME		1000
 #define PIRANHAPLANT_DIYING_TIME		250
