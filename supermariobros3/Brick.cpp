@@ -19,6 +19,9 @@ void CBrick::Render()
 
 	int aniId = ID_ANI_BRICK_QUESTION_MARK;
 	if (state == BRICK_STATE_EMPTY) aniId = ID_ANI_BRICK_QUESTION_EMPTY;
+	if (this->type == BRICK_BREAKABLE) {
+		aniId = ID_ANI_BRICK_BREAKABLE;
+	}
 
 	animations->Get(aniId)->Render(x, y);
 	//RenderBoundingBox();
