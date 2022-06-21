@@ -4,6 +4,8 @@
 #include "PlayScene.h"
 #include "Coin.h"
 #include "Leaf.h"
+#include "GameObject.h"
+#include "BreakPiece.h"
 
 CBrick::CBrick(float x, float y, int type) : CGameObject(x, y)
 {
@@ -15,6 +17,9 @@ CBrick::CBrick(float x, float y, int type) : CGameObject(x, y)
 
 void CBrick::Render()
 {
+	if (isDeleted)
+		return;
+
 	CAnimations* animations = CAnimations::GetInstance();
 
 	int aniId = ID_ANI_BRICK_QUESTION_MARK;
@@ -34,6 +39,31 @@ void CBrick::GetBoundingBox(float& l, float& t, float& r, float& b)
 	r = l + BRICK_BBOX_WIDTH;
 	b = t + BRICK_BBOX_HEIGHT;
 }
+
+//void CBrick::Break() {
+//	CPlayScene* currentScene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+//	CAnimations* animation_sets = CAnimations::GetInstance();
+//	
+//
+//	BreakPiece* bPieceTopLeft = new BreakPiece(-1, 1);
+//	bPieceTopLeft->SetPosition(x, y);
+//
+//	BreakPiece* bPieceBottomLeft = new BreakPiece(-1, -1);
+//	bPieceBottomLeft->SetPosition(x, y);
+//
+//	BreakPiece* bPieceTopRight = new BreakPiece(1, 1);
+//	bPieceTopRight->SetPosition(x, y);
+//
+//	BreakPiece* bPieceBottomRight = new BreakPiece(1, -1);
+//	bPieceBottomRight->SetPosition(x, y);
+//
+//	currentScene->AddObject(bPieceTopLeft);
+//	currentScene->AddObject(bPieceBottomLeft);
+//	currentScene->AddObject(bPieceTopRight);
+//	currentScene->AddObject(bPieceBottomRight);
+//
+//	isDeleted = true;
+//}
 
 void CBrick::Hit()
 {
