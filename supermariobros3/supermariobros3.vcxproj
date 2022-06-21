@@ -161,6 +161,7 @@
     <ClCompile Include="SampleKeyEventHandler.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Sprites.cpp" />
+    <ClCompile Include="Switch.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Utils.cpp" />
@@ -192,6 +193,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Sprites.h" />
+    <ClInclude Include="Switch.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="Map.h" />

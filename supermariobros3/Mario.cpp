@@ -15,6 +15,7 @@
 #include "Collision.h"
 #include "PlayScene.h"
 #include "Leaf.h"
+#include "Switch.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -105,6 +106,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithFireBullet(e);
 	else if (dynamic_cast<CLeaf*>(e->obj))
 		OnCollisionWithLeaf(e);
+	else if (dynamic_cast<Switch*>(e->obj))
+		OnCollisionWithSwitch(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -124,6 +127,15 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 	{
 		if (goomba->GetState() != GOOMBA_STATE_DIE)
 			Downgrade();
+	}
+}
+
+void CMario::OnCollisionWithSwitch(LPCOLLISIONEVENT e)
+{
+	Switch* sw = dynamic_cast<Switch*>(e->obj);
+	if (e->ny < 0 && sw->GetState() == SWITCH_STATE_IDLE) {
+		sw->SetState(SWITCH_STATE_PRESSED);
+		vy = -MARIO_JUMP_DEFLECT_SPEED;
 	}
 }
 

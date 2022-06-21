@@ -1,0 +1,8 @@
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+#piece of brick
+20116	274	197	282	204	20
+20117	274	197	282	204	20
+[ANIMATIONS]
+# --- piece of brick ---
+6061	20116	250	20117	250

@@ -37,4 +37,5 @@ public:
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	void Break();
 	void Hit();
+	int Type() { return type; }
 };

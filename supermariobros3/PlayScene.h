@@ -43,6 +43,7 @@ public:
 	void Clear();
 	void PurgeDeletedObjects();
 	void AddObject(LPGAMEOBJECT object) { objects.push_back(object);  };
+	vector<LPGAMEOBJECT> GetObjects() { return objects; }
 
 	static bool IsGameObjectDeleted(const LPGAMEOBJECT& o);
 	CHud* GetHUD() { return hud; }

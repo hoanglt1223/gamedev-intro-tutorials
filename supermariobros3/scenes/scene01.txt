@@ -12,6 +12,8 @@ assets\pipe.txt
 assets\bullet.txt
 assets\interface.txt
 assets\leaf.txt
+assets\piece_of_brick.txt
+assets\p_switch.txt
 
 [MAP]
 scenes\world-1-1.txt
@@ -22,7 +24,7 @@ scenes\world-1-1.txt
 # See OBJECT_TYPE constants in AssetIDs.h
 
 # MARIO
-0	120	210
+0	2000	388
 
 # BRICKS #type
 1	176	352	1
@@ -166,6 +168,8 @@ scenes\world-1-1.txt
 7	2336	608	70
 7	2353	624	70
 7	2369	624	70
+#Switch
+8	2032	368	42
 
 #Portal 
 50	300	120	316	160	2

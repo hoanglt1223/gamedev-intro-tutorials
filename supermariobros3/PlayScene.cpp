@@ -13,6 +13,7 @@
 #include "PiranhaPlant.h"
 #include "PiranhaPlantFire.h"
 #include "SampleKeyEventHandler.h"
+#include "Switch.h"
 
 #include "Font.h"
 
@@ -133,6 +134,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_BRICK: {
 		int type = atoi(tokens[3].c_str());
 		obj = new CBrick(x, y, type);
+		break;
+	}
+	case OBJECT_TYPE_SWITCH: {
+		obj = new Switch();
+		obj->SetPosition(x, y);
+		obj->SetState(SWITCH_STATE_IDLE);
 		break;
 	}
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;

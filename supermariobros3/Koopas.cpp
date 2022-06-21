@@ -83,9 +83,7 @@ void CKoopas::OnCollisionWithPlan(LPCOLLISIONEVENT e) {
 	{
 		piranhaPlant->SetState(PIRANHAPLANT_STATE_DEATH);
 		piranhaPlantFire->SetState(PIRANHAPLANT_STATE_DEATH);
-
 	}
-
 }
 
 void CKoopas::OnCollisionWithBrick(LPCOLLISIONEVENT e)
@@ -93,6 +91,9 @@ void CKoopas::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 	CBrick* b = (CBrick*)e->obj;
 	if (e->nx != 0) {
 		b->Hit();
+	}
+	if (e->nx != 0 && this->state == KOOPAS_STATE_ROLLING) {
+		b->Break();
 	}
 }
 
