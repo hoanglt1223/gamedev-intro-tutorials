@@ -40,7 +40,7 @@ void CPlatform::Render()
 
 
 	if (length <= 0) return;
-	if (type == PLATFORM_GROUND) return;
+	if (type == PLATFORM_GROUND || type == 5) return;
 	switch (type)
 	{
 	case PLATFORM_GROUND:

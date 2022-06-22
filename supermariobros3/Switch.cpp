@@ -2,6 +2,7 @@
 #include "Coin.h"
 #include "Brick.h"
 #include "PlayScene.h"
+#include "Platform.h"
 
 void Switch::Render() {
 	if (isDeleted)
@@ -60,6 +61,13 @@ void Switch::ChangeBrickToCoin() {
 				CCoin* coin = new CCoin(bX, bY);
 				((LPPLAYSCENE)currentScene)->AddObject(coin);
 				bBrick->Delete();
+			}
+		}
+		if (dynamic_cast<CPlatform*>(objects.at(i)) && !objects.at(i)->IsDeleted()) {
+			CPlatform* platform = dynamic_cast<CPlatform*>(objects.at(i));
+			float bX, bY;
+			if (platform->GetType() == 5) {
+				platform->Delete();
 			}
 		}
 	}
