@@ -102,6 +102,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPortal(e);
 	else if (dynamic_cast<CBrick*>(e->obj))
 		OnCollisionWithBrick(e);
+	else if (dynamic_cast<CPlatform*>(e->obj))
+		OnCollisionWithPlatForm(e);
 	else if (dynamic_cast<CMushroom*>(e->obj))
 		OnCollisionWithMushroom(e);
 	else if (dynamic_cast<PiranhaPlant*> (e->obj) || dynamic_cast<PiranhaPlantFire*> (e->obj))
@@ -112,6 +114,13 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithLeaf(e);
 	else if (dynamic_cast<Switch*>(e->obj))
 		OnCollisionWithSwitch(e);
+}
+
+void CMario::OnCollisionWithPlatForm(LPCOLLISIONEVENT e) {
+	CPlatform* platform = dynamic_cast<CPlatform*>(e->obj);
+	if (e->nx != 0 && isTuring && platform->GetType() == BRICK_BREAKABLE) {
+		platform->Delete();
+	}
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -126,6 +135,10 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 			goomba->Downgrade();
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
+	}
+	else if (e->nx != 0 && isTuring) {
+		goomba->SetIsDieByTail(true);
+		goomba->Downgrade();
 	}
 	else // hit by Goomba
 	{
@@ -158,6 +171,10 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 			koopas->Downgrade();
 			koopas->SetDirection(this->nx);
+		}
+		else if (e->nx != 0 && isTuring) {
+			koopas->SetIsDieByTail(true);
+			koopas->Downgrade();
 		}
 		else Downgrade();
 	}
@@ -202,6 +219,13 @@ void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 	if (e->ny > 0) {
 		b->Hit();
 	}
+	else if (e->nx != 0 && isTuring) {
+		if (b->Type() == BRICK_BREAKABLE) {
+			b->Break();
+		}
+		else
+			b->Hit();
+	}
 }
 
 void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
@@ -213,7 +237,12 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e)
 {
-	Downgrade();
+	PiranhaPlant* piranhaPlant = dynamic_cast<PiranhaPlant*>(e->obj);
+	if (isTuring) {
+		piranhaPlant->SetState(PIRANHAPLANT_STATE_DEATH);
+	}
+	else
+		Downgrade();
 }
 
 void CMario::OnCollisionWithFireBullet(LPCOLLISIONEVENT e) {
@@ -335,9 +364,17 @@ int CMario::GetAniIdRacoon()
 		}
 		else if (ax * vx < 0) aniId = ID_ANI_MARIO_RACOON_BRACE;
 		else if (abs(ax) == MARIO_ACCEL_RUN_X)
+		{
 			aniId = ID_ANI_MARIO_RACOON_RUNNING;
+			if (isHolding)
+				aniId = ID_ANI_MARIO_RACOON_HOLD_RUN;
+		}
 		else if (abs(ax) == MARIO_ACCEL_WALK_X)
+		{
 			aniId = ID_ANI_MARIO_RACOON_WALKING;
+			if (isHolding)
+				aniId = ID_ANI_MARIO_RACOON_HOLD_RUN;
+		}
 		else if (isAirborne) aniId = ID_ANI_MARIO_RACOON_AIRBORNE;
 		else if (isFlying) aniId = ID_ANI_MARIO_RACOON_FLYING;
 		if (isKick) {

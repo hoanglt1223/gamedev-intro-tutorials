@@ -200,6 +200,10 @@ void CKoopas::SetState(int state)
 		vx = -KOOPAS_WALKING_SPEED;
 		break;
 	case KOOPAS_STATE_STOMPED:
+		if (isDieByTail) {
+			DieByTail();
+			ay = GLOBAL_GRAVITY;
+		}
 		vx = 0;
 		break;
 	case KOOPAS_STATE_ROLLING:

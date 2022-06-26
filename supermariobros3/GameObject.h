@@ -14,6 +14,7 @@ using namespace std;
 
 #define GLOBAL_GRAVITY 0.0025f
 #define BBOX_ALPHA 0.25f
+#define DEFLECT_VY 0.3f
 
 class CGameObject
 {
@@ -31,7 +32,13 @@ protected:
 
 	bool isDeleted;
 
+	// For enemy only
+	bool isDieByTail = false;
+
 public:
+	bool IsDieByTail() { return isDieByTail; }
+	void SetIsDieByTail(bool die) { isDieByTail = die; }
+
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
 	void GetPosition(float& x, float& y) { x = this->x; y = this->y; }
@@ -43,6 +50,11 @@ public:
 	bool IsDeleted() { return isDeleted; }
 	int GetDirection() { return this->nx; }
 	void SetDirection(int nx) { this->nx = nx; }
+	
+	void DieByTail() {
+		vx = -vx;
+		vy = -DEFLECT_VY;
+	}
 	
 	void RenderBoundingBox();
 
