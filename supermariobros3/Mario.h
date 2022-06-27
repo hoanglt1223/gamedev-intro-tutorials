@@ -41,6 +41,7 @@
 #define MARIO_STATE_AIRBORNE_RIGHT	702
 
 #define MARIO_STATE_KICK			703
+#define MARIO_STATE_TAIL_ATTACK		704
 
 
 #pragma region ANIMATION_ID
@@ -94,6 +95,8 @@
 #define ID_ANI_MARIO_BIG_KICK 429
 #define ID_ANI_MARIO_RACOON_KICK 431
 
+#define ID_ANI_MARIO_RACOON_TAIL_ATTACK 444
+
 #define ID_ANI_MARIO_DIE 499
 
 
@@ -120,6 +123,8 @@
 
 #define MARIO_UNTOUCHABLE_TIME 2500
 #define MARIO_KICKING_TIME	200	
+#define MARIO_TURNING_STATE_TIME	60
+#define MARIO_TURNING_TAIL_TIME		300
 
 #define MAX_POWER_METER 7
 
@@ -141,6 +146,8 @@ class CMario : public CGameObject
 	ULONGLONG powerTimer;
 	ULONGLONG flyTimer;
 	ULONGLONG start_kicking = 0;
+	ULONGLONG start_turning_state = 0;
+	ULONGLONG start_turning = 0;
 
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
@@ -158,11 +165,16 @@ class CMario : public CGameObject
 	int GetAniIdRacoon();
 
 	void HandleMarioKicking();
+	void HandleTurning();
 
 public:
 	BOOLEAN isHolding = false;
 	BOOLEAN isReadyToHold = false;
 	BOOLEAN isKick = false;
+	
+	// TAIL_ATTACK
+	BOOLEAN isTuring = false;
+	int turningStack = 0;
 
 	CMario(float x, float y) : CGameObject(x, y)
 	{
@@ -205,6 +217,7 @@ public:
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
 	void StartKicking() { start_kicking = GetTickCount64(); isKick = true; }
 	void StopKicking() { start_kicking = 0; isKick = false; }
+	void StartTurning() { start_turning_state = GetTickCount64(); isTuring = true; }
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Downgrade();
@@ -217,4 +230,6 @@ public:
 	void AddCoin() { coin++; }
 	void Respawn();
 	bool IsPowerMaxed() { return powerMeter == MAX_POWER_METER ? true : false; }
+
+	bool IsSitting() { return isSitting; }
 };

@@ -38,6 +38,15 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		if (CGame::GetInstance()->IsPaused()) CGame::GetInstance()->Unpause();
 		else CGame::GetInstance()->Pause();
 		break;
+	case DIK_A:
+		/*if (mario->GetLevel() == MARIO_LEVEL_TAIL && mario->GetState() != MARIO_STATE_SITDOWN && !mario->GetIsReadyToRun() && !mario->GetIsHolding())
+			mario->SetState(MARIO_STATE_TAIL_ATTACK);*/
+		if (mario->GetLevel() == MARIO_LEVEL_RACOON && !mario->IsSitting() && !mario->isHolding)
+			mario->SetState(MARIO_STATE_TAIL_ATTACK);
+		/*if (mario->GetLevel() == MARIO_LEVEL_FIRE && !mario->GetIsHolding()) mario->ShootFireBall();
+		mario->SetIsReadyToRun(true);
+		mario->SetIsReadyToHold(true);*/
+		break;
 	}
 }
 

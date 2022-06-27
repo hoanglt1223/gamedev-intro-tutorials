@@ -27,6 +27,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
 
 	HandleMarioKicking();
+	HandleTurning();
 
 	if (state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_RUNNING_RIGHT) {
 		powerMeter = (int)floor(abs(vx) / abs(maxVx) * MAX_POWER_METER);
@@ -343,6 +344,9 @@ int CMario::GetAniIdRacoon()
 			aniId = ID_ANI_MARIO_RACOON_KICK;
 		}
 	}
+	if (isTuring) {
+		aniId = ID_ANI_MARIO_RACOON_TAIL_ATTACK;
+	}
 
 	if (aniId == -1) aniId = ID_ANI_MARIO_RACOON_IDLE;
 
@@ -496,7 +500,14 @@ void CMario::SetState(int state)
 	case MARIO_STATE_KICK:
 		StartKicking();
 		break;
+	case MARIO_STATE_TAIL_ATTACK:
+		if (!isTuring) {
+			turningStack = 0;
+			StartTurning();
+		}
+		break;
 	}
+
 
 	CGameObject::SetState(state);
 }
@@ -578,4 +589,19 @@ void CMario::HandleMarioKicking() {
 			SetState(MARIO_STATE_IDLE);
 		}
 	}
+}
+
+void CMario::HandleTurning() {
+
+	if (GetTickCount64() - start_turning >= MARIO_TURNING_STATE_TIME && isTuring) {
+		start_turning = GetTickCount64();
+		turningStack++;
+	}
+	if (GetTickCount64() - start_turning_state > MARIO_TURNING_TAIL_TIME && isTuring) {
+		isTuring = false;
+		start_turning_state = 0;
+		start_turning = 0;
+		turningStack = 0;
+	}
+
 }
