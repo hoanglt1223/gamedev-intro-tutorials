@@ -22,8 +22,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vx += ax * dt;
 	vy += ay * dt;
 
+	DebugOut(L"mario x: %f\n", this->x);
 
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
+
+	HandleMarioKicking();
 
 	if (state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_RUNNING_RIGHT) {
 		powerMeter = (int)floor(abs(vx) / abs(maxVx) * MAX_POWER_METER);
@@ -167,6 +170,7 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 					return;
 				}
 				else {
+					SetState(MARIO_STATE_KICK);
 					koopas->Downgrade();
 					koopas->SetDirection(this->nx);
 					return;
@@ -229,6 +233,7 @@ int CMario::GetAniIdSmall()
 		else aniId = ID_ANI_MARIO_SMALL_JUMP_WALK;
 	}
 	else
+	{
 		if (isSitting)
 			aniId = ID_ANI_MARIO_BIG_SIT;
 		else if (vx == 0) {
@@ -249,6 +254,10 @@ int CMario::GetAniIdSmall()
 			if (isHolding)
 				aniId = ID_ANI_MARIO_SMALL_HOLD_RUN;
 		}
+		if (isKick) {
+			aniId = ID_ANI_MARIO_SMALL_KICK;
+		}
+	}
 
 
 	if (aniId == -1) aniId = ID_ANI_MARIO_SMALL_IDLE;
@@ -270,6 +279,7 @@ int CMario::GetAniIdBig()
 		else aniId = ID_ANI_MARIO_BIG_JUMPED;
 	}
 	else
+	{
 		if (isSitting) aniId = ID_ANI_MARIO_BIG_SIT;
 		else if (vx == 0) {
 			aniId = ID_ANI_MARIO_BIG_IDLE;
@@ -280,7 +290,7 @@ int CMario::GetAniIdBig()
 		else if (abs(ax) == MARIO_ACCEL_RUN_X)
 		{
 			aniId = ID_ANI_MARIO_BIG_RUNNING;
-			if(isHolding)
+			if (isHolding)
 				aniId = ID_ANI_MARIO_BIG_HOLD_RUN;
 		}
 		else if (abs(ax) == MARIO_ACCEL_WALK_X)
@@ -289,6 +299,10 @@ int CMario::GetAniIdBig()
 			if (isHolding)
 				aniId = ID_ANI_MARIO_BIG_HOLD_RUN;
 		}
+		if (isKick) {
+			aniId = ID_ANI_MARIO_BIG_KICK;
+		}
+	}
 
 	if (aniId == -1) aniId = ID_ANI_MARIO_BIG_IDLE;
 
@@ -311,6 +325,7 @@ int CMario::GetAniIdRacoon()
 			aniId = ID_ANI_MARIO_RACOON_FLYING;
 	}
 	else
+	{
 		if (isSitting) aniId = ID_ANI_MARIO_RACOON_SIT;
 		else if (vx == 0) {
 			aniId = ID_ANI_MARIO_RACOON_IDLE;
@@ -324,6 +339,10 @@ int CMario::GetAniIdRacoon()
 			aniId = ID_ANI_MARIO_RACOON_WALKING;
 		else if (isAirborne) aniId = ID_ANI_MARIO_RACOON_AIRBORNE;
 		else if (isFlying) aniId = ID_ANI_MARIO_RACOON_FLYING;
+		if (isKick) {
+			aniId = ID_ANI_MARIO_RACOON_KICK;
+		}
+	}
 
 	if (aniId == -1) aniId = ID_ANI_MARIO_RACOON_IDLE;
 
@@ -474,6 +493,9 @@ void CMario::SetState(int state)
 		vx = 0;
 		ax = 0;
 		break;
+	case MARIO_STATE_KICK:
+		StartKicking();
+		break;
 	}
 
 	CGameObject::SetState(state);
@@ -549,3 +571,11 @@ void CMario::Respawn()
 	SetPosition(x < 20 ? 20 : x, 200);
 }
 
+void CMario::HandleMarioKicking() {
+	if (isKick) {
+		if (GetTickCount64() - start_kicking > MARIO_KICKING_TIME) {
+			StopKicking();
+			SetState(MARIO_STATE_IDLE);
+		}
+	}
+}

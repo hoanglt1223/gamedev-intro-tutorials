@@ -55,12 +55,12 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 
 	if (dynamic_cast<PiranhaPlant*>(e->obj) || dynamic_cast<PiranhaPlantFire*>(e->obj))
 		OnCollisionWithPlan(e);
-	
-	if (!e->obj->IsBlocking() ) return;
+
+	if (!e->obj->IsBlocking()) return;
 
 	if (dynamic_cast<CKoopas*>(e->obj)) return;
-	
-	
+
+
 
 	if (e->ny != 0)
 	{
@@ -89,11 +89,12 @@ void CKoopas::OnCollisionWithPlan(LPCOLLISIONEVENT e) {
 void CKoopas::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 {
 	CBrick* b = (CBrick*)e->obj;
-	if (e->nx != 0) {
-		b->Hit();
-	}
 	if (e->nx != 0 && this->state == KOOPAS_STATE_ROLLING) {
-		b->Break();
+		if (b->Type() == BRICK_BREAKABLE) {
+			b->Break();
+		}
+		else
+			b->Hit();
 	}
 }
 
@@ -167,7 +168,7 @@ void CKoopas::HandleBeingHeld(LPGAMEOBJECT player) {
 		if (state == KOOPAS_STATE_STOMPED) {
 			this->nx = mario->GetDirection();
 			isBeingHeld = false;
-			//mario->StartKicking();
+			mario->StartKicking();
 			SetState(KOOPAS_STATE_ROLLING);
 		}
 	}

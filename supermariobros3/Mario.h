@@ -40,6 +40,8 @@
 #define MARIO_STATE_AIRBORNE_LEFT	701
 #define MARIO_STATE_AIRBORNE_RIGHT	702
 
+#define MARIO_STATE_KICK			703
+
 
 #pragma region ANIMATION_ID
 
@@ -88,6 +90,10 @@
 #define ID_ANI_MARIO_BIG_HOLD_JUMP 453
 #define ID_ANI_MARIO_RACOON_HOLD_JUMP 455
 
+#define ID_ANI_MARIO_SMALL_KICK 428
+#define ID_ANI_MARIO_BIG_KICK 429
+#define ID_ANI_MARIO_RACOON_KICK 431
+
 #define ID_ANI_MARIO_DIE 499
 
 
@@ -113,6 +119,7 @@
 
 
 #define MARIO_UNTOUCHABLE_TIME 2500
+#define MARIO_KICKING_TIME	200	
 
 #define MAX_POWER_METER 7
 
@@ -133,6 +140,7 @@ class CMario : public CGameObject
 	int powerMeter;
 	ULONGLONG powerTimer;
 	ULONGLONG flyTimer;
+	ULONGLONG start_kicking = 0;
 
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
@@ -149,9 +157,12 @@ class CMario : public CGameObject
 	int GetAniIdSmall();
 	int GetAniIdRacoon();
 
+	void HandleMarioKicking();
+
 public:
 	BOOLEAN isHolding = false;
 	BOOLEAN isReadyToHold = false;
+	BOOLEAN isKick = false;
 
 	CMario(float x, float y) : CGameObject(x, y)
 	{
@@ -190,7 +201,10 @@ public:
 	int GetLevel() {
 		return this->level;
 	}
+	
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
+	void StartKicking() { start_kicking = GetTickCount64(); isKick = true; }
+	void StopKicking() { start_kicking = 0; isKick = false; }
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Downgrade();
