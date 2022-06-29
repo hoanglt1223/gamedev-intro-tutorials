@@ -96,9 +96,16 @@ void CGoomba::SetState(int state)
 	case GOOMBA_STATE_DIE:
 		die_start = GetTickCount64();
 		y += (GOOMBA_BBOX_HEIGHT - GOOMBA_BBOX_HEIGHT_DIE) / 2;
-		vx = 0;
-		vy = 0;
-		ay = 0;
+		if (isDieByTail) {
+			DieByTail();
+			ay = GLOBAL_GRAVITY;
+		}
+		else
+		{
+			vx = 0;
+			ay = 0;
+			vy = 0;
+		}
 		break;
 	case GOOMBA_STATE_WALKING:
 		vx = -GOOMBA_WALKING_SPEED;

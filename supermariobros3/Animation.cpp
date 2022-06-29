@@ -60,4 +60,3 @@ void CAnimation::Render(int nx, float x, float y)
 
 	frames[currentFrame]->GetSprite()->Draw(nx, x, y);
 }
-

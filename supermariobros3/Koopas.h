@@ -3,6 +3,7 @@
 
 #define KOOPAS_WALKING_SPEED 0.03f
 #define KOOPAS_ROLLING_SPEED 0.2f
+#define KOOPAS_DEFLECT_SPEED  0.3f
 
 #define KOOPAS_BBOX_WIDTH 17
 #define KOOPAS_BBOX_HEIGHT 24
@@ -36,8 +37,15 @@ protected:
 
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 	void OnCollisionWithPlatform(LPCOLLISIONEVENT e);
+	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
+	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
+	void OnCollisionWithPlan(LPCOLLISIONEVENT e);
 
+	void HandleBeingHeld(LPGAMEOBJECT player);
 public:
+	bool isBeingHeld = false;
+	void SetIsBeingHeld(bool m) { isBeingHeld = m; };
+
 	CKoopas(float x, float y);
 	virtual void SetState(int state);
 	virtual void Downgrade();

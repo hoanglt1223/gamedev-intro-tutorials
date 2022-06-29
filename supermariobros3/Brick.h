@@ -22,6 +22,7 @@
 #define BRICK_STATE_DEFAULT 0 
 #define BRICK_STATE_EMPTY 1
 
+
 #define TYPE
 class CBrick : public CGameObject {
 	int type;
@@ -34,6 +35,7 @@ public:
 	void Render();
 	void Update(DWORD dt) {}
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
-
+	void Break();
 	void Hit();
+	int Type() { return type; }
 };

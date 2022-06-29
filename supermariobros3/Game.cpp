@@ -8,6 +8,8 @@
 #include "Animations.h"
 #include "PlayScene.h"
 
+#define BACKBUFFER_OFFSET 12
+
 CGame * CGame::__instance = NULL;
 
 /*
@@ -24,8 +26,8 @@ void CGame::Init(HWND hWnd, HINSTANCE hInstance)
 	RECT r;
 	GetClientRect(hWnd, &r);
 
-	backBufferWidth = r.right + 1;
-	backBufferHeight = r.bottom + 1;
+	backBufferWidth = r.right + BACKBUFFER_OFFSET; // to make it look like NES game screen
+	backBufferHeight = r.bottom + BACKBUFFER_OFFSET;
 
 	DebugOut(L"[INFO] Window's client area: width= %d, height= %d\n", r.right - 1, r.bottom - 1);
 
@@ -466,8 +468,9 @@ void CGame::_ParseSection_SETTINGS(string line)
 	vector<string> tokens = split(line);
 
 	if (tokens.size() < 2) return;
-	if (tokens[0] == "start")
-		next_scene = atoi(tokens[1].c_str());
+	if (tokens[0] == "start") next_scene = atoi(tokens[1].c_str());
+	else if (tokens[0] == "width") screenWidth = atoi(tokens[1].c_str());
+	else if (tokens[0] == "height") screenHeight = atoi(tokens[1].c_str());
 	else
 		DebugOut(L"[ERROR] Unknown game setting: %s\n", ToWSTR(tokens[0]).c_str());
 }
@@ -527,7 +530,9 @@ void CGame::Load(LPCWSTR gameFile)
 	f.close();
 
 	DebugOut(L"[INFO] Loading game file : %s has been loaded successfully\n", gameFile);
-
+	//SetWindowPos(this->hWnd, 0, 0, 0, 
+	//	256, 240, 
+	//	SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 	SwitchScene();
 }
 

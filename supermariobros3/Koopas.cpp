@@ -2,6 +2,10 @@
 #include "Collision.h"
 #include "Platform.h"
 #include "debug.h"
+#include "PlayScene.h"
+#include "PiranhaPlant.h"
+#include "PiranhaPlantFire.h"
+#include "Goomba.h"
 
 CKoopas::CKoopas(float x, float y) : CGameObject(x, y)
 {
@@ -31,19 +35,32 @@ void CKoopas::GetBoundingBox(float& left, float& top, float& right, float& botto
 
 void CKoopas::OnNoCollision(DWORD dt)
 {
-		x += vx * dt;
-		y += vy * dt;
+	x += vx * dt;
+	y += vy * dt;
 
 }
 
 void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (!e->obj->IsBlocking()) return;
-	if (dynamic_cast<CKoopas*>(e->obj)) return;
+	if (dynamic_cast<CGoomba*>(e->obj))
+		OnCollisionWithGoomba(e);
+
 	if (dynamic_cast<CPlatform*>(e->obj))
 	{
 		OnCollisionWithPlatform(e);
 	}
+
+	if (dynamic_cast<CBrick*>(e->obj))
+		OnCollisionWithBrick(e);
+
+	if (dynamic_cast<PiranhaPlant*>(e->obj) || dynamic_cast<PiranhaPlantFire*>(e->obj))
+		OnCollisionWithPlan(e);
+
+	if (!e->obj->IsBlocking()) return;
+
+	if (dynamic_cast<CKoopas*>(e->obj)) return;
+
+
 
 	if (e->ny != 0)
 	{
@@ -54,6 +71,42 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 		vx = -vx;
 	}
 }
+
+void CKoopas::OnCollisionWithPlan(LPCOLLISIONEVENT e) {
+
+	PiranhaPlant* piranhaPlant = dynamic_cast<PiranhaPlant*>(e->obj);
+	PiranhaPlantFire* piranhaPlantFire = dynamic_cast<PiranhaPlantFire*>(e->obj);
+
+	if ((piranhaPlant->GetState() != PIRANHAPLANT_STATE_DEATH ||
+		piranhaPlantFire->GetState() != PIRANHAPLANT_STATE_DEATH) &&
+		this->GetState() == KOOPAS_STATE_ROLLING);
+	{
+		piranhaPlant->SetState(PIRANHAPLANT_STATE_DEATH);
+		piranhaPlantFire->SetState(PIRANHAPLANT_STATE_DEATH);
+	}
+}
+
+void CKoopas::OnCollisionWithBrick(LPCOLLISIONEVENT e)
+{
+	CBrick* b = (CBrick*)e->obj;
+	if (e->nx != 0 && this->state == KOOPAS_STATE_ROLLING) {
+		if (b->Type() == BRICK_BREAKABLE) {
+			b->Break();
+		}
+		else
+			b->Hit();
+	}
+}
+
+void CKoopas::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
+{
+	CGoomba* goomba = (CGoomba*)e->obj;
+	if (e->nx != 0 && this->state == KOOPAS_STATE_ROLLING) {
+		goomba->Downgrade();
+	}
+}
+
+
 
 void CKoopas::OnCollisionWithPlatform(LPCOLLISIONEVENT e)
 {
@@ -70,22 +123,52 @@ void CKoopas::OnCollisionWithPlatform(LPCOLLISIONEVENT e)
 			vx = -KOOPAS_WALKING_SPEED;
 		}
 	}
+	if (e->nx != 0 && state == KOOPAS_STATE_ROLLING && p->GetType() == BRICK_BREAKABLE) {
+		p->Delete();
+	}
 }
 
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	vy += ay * dt;
 	vx += ax * dt;
 
-	//if ((state == KOOPAS_STATE_STOMPED) && (GetTickCount64() - die_start > KOOPAS_DIE_TIMEOUT))
-	//{
-	//	isDeleted = true;
-	//	return;
-	//}
-
-
+	HandleBeingHeld(mario);
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
+}
+
+void CKoopas::HandleBeingHeld(LPGAMEOBJECT player) {
+
+	CMario* mario = dynamic_cast<CMario*>(player);
+	int mNx = mario->GetDirection();
+	float mx, my;
+	mario->GetPosition(mx, my);
+
+	if (isBeingHeld && mario->isHolding) {
+		if (state == KOOPAS_STATE_STOMPED) {
+			if (mNx > 0) {
+				x = mx + MARIO_BIG_BBOX_WIDTH * mNx - 3.0f;
+			}
+			else x = mx + MARIO_BIG_BBOX_WIDTH * mNx;
+			if (mario->GetLevel() != MARIO_LEVEL_SMALL) {
+				y = my - 2.0f;
+			}
+			else {
+				y = my - 2.0f;
+			}
+			vy = 0;
+		}
+	}
+	else if (isBeingHeld && !mario->isHolding) {
+		if (state == KOOPAS_STATE_STOMPED) {
+			this->nx = mario->GetDirection();
+			isBeingHeld = false;
+			mario->StartKicking();
+			SetState(KOOPAS_STATE_ROLLING);
+		}
+	}
 }
 
 void CKoopas::Render()
@@ -114,10 +197,15 @@ void CKoopas::SetState(int state)
 		vx = -KOOPAS_WALKING_SPEED;
 		break;
 	case KOOPAS_STATE_STOMPED:
+		if (isDieByTail) {
+			DieByTail();
+			ay = GLOBAL_GRAVITY;
+		}
 		vx = 0;
 		break;
 	case KOOPAS_STATE_ROLLING:
-		vx = -KOOPAS_ROLLING_SPEED * nx;
+		CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+		vx = KOOPAS_ROLLING_SPEED * mario->GetDirectionX();
 		break;
 	}
 }
@@ -128,4 +216,6 @@ void CKoopas::Downgrade()
 		SetState(KOOPAS_STATE_STOMPED);
 	else if (state == KOOPAS_STATE_STOMPED)
 		SetState(KOOPAS_STATE_ROLLING);
+	else if (state == KOOPAS_STATE_ROLLING)
+		SetState(KOOPAS_STATE_STOMPED);
 }

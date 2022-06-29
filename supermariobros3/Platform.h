@@ -4,6 +4,10 @@
 
 #define PLATFORM_GROUND 0
 #define PLATFORM_SPECIAL 1
+#define PLATFORM_PIPE 3
+#define PLATFORM_PIPE_HIGH 2
+#define PLATFORM_ANI_PIPE 800011
+#define PLATFORM_ANI_PIPE_HIGH	800010
 
 // 
 // The most popular type of object in Mario! 
