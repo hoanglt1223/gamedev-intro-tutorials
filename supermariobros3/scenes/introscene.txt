@@ -1,0 +1,8 @@
+[ASSETS]
+assets\intro_scene.txt
+[OBJECTS]
+# type	x	y	ani_set_id	extra_settings per object type	type
+#========GROUND========
+4	0	205
+4	300	205
+4	300	205
