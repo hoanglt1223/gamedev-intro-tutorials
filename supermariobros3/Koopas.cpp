@@ -123,6 +123,9 @@ void CKoopas::OnCollisionWithPlatform(LPCOLLISIONEVENT e)
 			vx = -KOOPAS_WALKING_SPEED;
 		}
 	}
+	if (e->nx != 0 && state == KOOPAS_STATE_ROLLING && p->GetType() == BRICK_BREAKABLE) {
+		p->Delete();
+	}
 }
 
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -130,12 +133,6 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	vy += ay * dt;
 	vx += ax * dt;
-
-	//if ((state == KOOPAS_STATE_STOMPED) && (GetTickCount64() - die_start > KOOPAS_DIE_TIMEOUT))
-	//{
-	//	isDeleted = true;
-	//	return;
-	//}
 
 	HandleBeingHeld(mario);
 	CGameObject::Update(dt, coObjects);

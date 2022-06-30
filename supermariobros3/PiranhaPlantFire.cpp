@@ -142,7 +142,7 @@ void PiranhaPlantFire::SetState(int state) {
 		break;
 	case PIRANHAPLANT_STATE_DEATH:
 		vy = 0;
-		IsDeleted();
+		Delete();
 		break;
 	case PIRANHAPLANT_STATE_INACTIVE:
 		vy = 0;
