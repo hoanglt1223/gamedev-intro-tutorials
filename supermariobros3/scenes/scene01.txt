@@ -24,7 +24,7 @@ scenes\world-1-1.txt
 # See OBJECT_TYPE constants in AssetIDs.h
 
 # MARIO
-0	2000	355
+0	80	355
 
 # BRICKS #type
 1	176	352	1

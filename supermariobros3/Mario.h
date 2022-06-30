@@ -230,7 +230,11 @@ public:
 
 	void AddCoin() { coin++; }
 	void Respawn();
-	bool IsPowerMaxed() { return powerMeter == MAX_POWER_METER ? true : false; }
+	void Flying() { isFlying = true; }
 
+	bool IsPowerMaxed() { return powerMeter == MAX_POWER_METER ? true : false; }
+	
 	bool IsSitting() { return isSitting; }
+	bool IsOnPlatform() { return isOnPlatform; }
+	bool IsAirBorne() { return isAirborne; }
 };

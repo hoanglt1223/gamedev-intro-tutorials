@@ -17,7 +17,12 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		mario->SetState(MARIO_STATE_SIT);
 		break;
 	case DIK_S:
-		mario->SetState(MARIO_STATE_JUMP);
+		if (mario->GetLevel() == MARIO_LEVEL_RACOON && !mario->IsOnPlatform())
+		{
+			mario->SetState(MARIO_STATE_AIRBORNE);
+		}
+		else
+			mario->SetState(MARIO_STATE_JUMP);
 		break;
 	case DIK_1:
 		mario->SetLevel(MARIO_LEVEL_SMALL);
@@ -77,14 +82,28 @@ void CSampleKeyHandler::KeyState(BYTE* states)
 	LPGAME game = CGame::GetInstance();
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 
-	if (game->IsKeyDown(DIK_X))
+	if (game->IsKeyDown(DIK_S))
 	{
 		if (game->IsKeyDown(DIK_LEFT))
-			mario->SetState(MARIO_STATE_AIRBORNE_LEFT);
+		{
+			if (mario->IsAirBorne()) {
+				mario->SetState(MARIO_STATE_AIRBORNE_LEFT);
+			}
+			else if (mario->IsPowerMaxed()) {
+				mario->SetState(MARIO_STATE_AIRBORNE_LEFT);
+			}
+		}
 		else if (game->IsKeyDown(DIK_RIGHT))
-			mario->SetState(MARIO_STATE_AIRBORNE_RIGHT);
-		else
-			mario->SetState(MARIO_STATE_AIRBORNE);
+		{
+			if (mario->IsAirBorne()) {
+				mario->SetState(MARIO_STATE_AIRBORNE_RIGHT);
+			}
+			else if (mario->IsPowerMaxed()) {
+				mario->SetState(MARIO_STATE_AIRBORNE_RIGHT);
+			}
+		}
+		/*else
+			mario->SetState(MARIO_STATE_AIRBORNE);*/
 	}
 	else if (game->IsKeyDown(DIK_RIGHT))
 	{
