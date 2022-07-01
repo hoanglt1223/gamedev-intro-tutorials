@@ -481,7 +481,7 @@ void CMario::SetState(int state)
 			SetState(MARIO_STATE_IDLE);
 			break;
 		}
-		if (level == MARIO_LEVEL_RACOON && !isOnPlatform)
+		if (level == MARIO_LEVEL_RACOON)
 			isAirborne = true;
 		break;
 

@@ -17,9 +17,9 @@ class CMap
 	int textureId;
 	int mapRows, mapColumns;
 	int tilesheetRows, tilesheetColumns;
-	int tileWidth, tileHeight;
-	int mapStart, mapEnd;
-	int secretStart, secretEnd;
+	int tileWidth = 16;
+	int countTile = 0;
+	int totalTiles = 0;
 	int** tiles;
 
 public:

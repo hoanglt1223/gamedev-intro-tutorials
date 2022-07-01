@@ -8,6 +8,7 @@
 #include "Animations.h"
 #include "PlayScene.h"
 #include "IntroScene.h"
+#include "WorldScene.h"
 
 #define BACKBUFFER_OFFSET 12
 
@@ -103,7 +104,7 @@ void CGame::Init(HWND hWnd, HINSTANCE hInstance)
 	//
 	//
 
-	D3D10_SAMPLER_DESC desc; 
+	D3D10_SAMPLER_DESC desc;
 	desc.Filter = D3D10_FILTER_MIN_MAG_POINT_MIP_LINEAR;
 	desc.AddressU = D3D10_TEXTURE_ADDRESS_CLAMP;
 	desc.AddressV = D3D10_TEXTURE_ADDRESS_CLAMP;
@@ -275,7 +276,7 @@ LPTEXTURE CGame::LoadTexture(LPCWSTR texturePath)
 		return NULL;
 	}
 
-	D3DX10_IMAGE_LOAD_INFO info; 
+	D3DX10_IMAGE_LOAD_INFO info;
 	ZeroMemory(&info, sizeof(D3DX10_IMAGE_LOAD_INFO));
 	info.Width = imageInfo.Width;
 	info.Height = imageInfo.Height;
@@ -484,7 +485,7 @@ void CGame::_ParseSection_SCENES(string line)
 	int id = atoi(tokens[0].c_str());
 	LPCWSTR path = ToLPCWSTR(tokens[1]);   // file: ASCII format (single-byte char) => Wide Char
 
-	if (id == 1)
+	if (id == 1 || id == 2)
 	{
 		LPSCENE scene = new CPlayScene(id, path);
 		scenes[id] = scene;
@@ -492,6 +493,11 @@ void CGame::_ParseSection_SCENES(string line)
 	if (id == 3)
 	{
 		LPSCENE scene = new CIntroScene(id, path);
+		scenes[id] = scene;
+	}
+	if (id == 4)
+	{
+		LPSCENE scene = new CWorldScene(id, path);
 		scenes[id] = scene;
 	}
 }

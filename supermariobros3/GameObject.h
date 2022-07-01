@@ -25,6 +25,7 @@ protected:
 
 	float vx;
 	float vy;
+	int tag = 0;
 
 	int nx;
 
@@ -39,23 +40,27 @@ public:
 	bool IsDieByTail() { return isDieByTail; }
 	void SetIsDieByTail(bool die) { isDieByTail = die; }
 
+	void SetTag(int tag) { this->tag = tag; }
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
 	void GetPosition(float& x, float& y) { x = this->x; y = this->y; }
 	void GetSpeed(float& vx, float& vy) { vx = this->vx; vy = this->vy; }
 
+	int GetX() { return this->x; }
+	int GetY() { return this->y; }
+	int GetTag() { return this->tag; }
 	int GetState() { return this->state; }
 	int GetDirectionX() { return this->nx; }
 	virtual void Delete() { isDeleted = true; }
 	bool IsDeleted() { return isDeleted; }
 	int GetDirection() { return this->nx; }
 	void SetDirection(int nx) { this->nx = nx; }
-	
+
 	void DieByTail() {
 		vx = -vx;
 		vy = -DEFLECT_VY;
 	}
-	
+
 	void RenderBoundingBox();
 
 	CGameObject();

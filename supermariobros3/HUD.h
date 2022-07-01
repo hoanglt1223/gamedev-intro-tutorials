@@ -5,7 +5,8 @@
 #include "Font.h"
 #include "Animations.h"
 #include "GameObject.h"
-
+#define PLAYSCENE_HUD	0
+#define WORLDSCENE_HUD	1
 enum HUDSprites
 {
 	STATS = 50001,

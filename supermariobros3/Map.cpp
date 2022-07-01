@@ -7,18 +7,19 @@ CMap::CMap(LPCWSTR path) {
 
 	f >> texturePath >> textureId >>
 		mapRows >> mapColumns >>
-		tilesheetRows >> tilesheetColumns >>
-		tileWidth >> tileHeight >>
-		mapStart >> mapEnd >>
-		secretStart >> secretEnd;
+		tilesheetRows >> tilesheetColumns;
 
+	totalTiles = tilesheetRows * tilesheetColumns;
 	LoadTextures();
 	tiles = new int* [mapRows];
 	for (int i = 0; i < mapRows; i++)
 	{
 		tiles[i] = new int[mapColumns];
 		for (int j = 0; j < mapColumns; j++)
+		{
 			f >> tiles[i][j];
+			//DebugOut(L"Iitle =>>> %d <=> %d <=> %d\n", tiles[i][j], i, j);
+		}
 	}
 
 	f.close();
@@ -38,7 +39,9 @@ void CMap::LoadTextures()
 		for (int j = 0; j < tilesheetColumns; j++)
 		{
 			int spriteId = textureId + previousId;
-			sprites->Add(spriteId, tileWidth * j, tileHeight * i, tileWidth * (j + 1) - 1, tileHeight * (i + 1) - 1, textureMap);
+			countTile = spriteId; //maxSpriteId
+			//DebugOut(L"LoadTextures() => %d \n", spriteId);
+			sprites->Add(spriteId, tileWidth * j, tileWidth * i, tileWidth * (j + 1) - 1, tileWidth * (i + 1) - 1, textureMap);
 			previousId++;
 		}
 
@@ -49,11 +52,16 @@ void CMap::Render()
 	float cx, cy;
 	CGame::GetInstance()->GetCamPos(cx, cy);
 	int startColumn = (int)cx / tileWidth;
-	int endColumn = startColumn + (CGame::GetInstance()->GetScreenWidth() / tileWidth);
-
+	int endColumn = (int)ceil((cx + CGame::GetInstance()->GetBackBufferWidth()) / 16);
+	if (endColumn >= mapColumns)
+		endColumn = mapColumns - 1;
 	for (int i = 0; i < mapRows; i++)
 		for (int j = startColumn; j <= endColumn; j++)
-			sprites->Get(tiles[i][j] + textureId)->Draw(j * (float)tileWidth, i * (float)tileHeight);
+		{
+			int spriteId = tiles[i][j] + textureId;
+			//DebugOut(L"spriteId =>>> %d <=> %d <=> %d\n", tiles[i][j], i, j);
+			sprites->Get(spriteId)->Draw(j * (float)tileWidth, i * (float)tileWidth);
+		}
 }
 
 CMap::~CMap()

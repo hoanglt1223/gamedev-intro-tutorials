@@ -143,8 +143,9 @@ void CIntroScene::LoadAssets(LPCWSTR assetFile)
 }
 
 void CIntroScene::Update(DWORD dt) {
+	int world_scene = 4;
 	if (isSwitch) {
-		CGame::GetInstance()->InitiateSwitchScene(1); //note
+		CGame::GetInstance()->InitiateSwitchScene(world_scene);
 	}
 }
 
@@ -185,8 +186,12 @@ void CIntroScene::Load() {
 }
 
 void CIntroScene::Render() {
-	BackGround->Render(130, 90); // define 
-	Three->Render(135, 113);	//define
+	int backgroundX = 130;
+	int backgroundY = 90;
+	int threeX = 135;
+	int threeY = 113;
+	BackGround->Render(backgroundX, backgroundY);
+	Three->Render(threeX, threeY);
 	for (size_t i = 0; i < objects.size(); i++)
 		objects[i]->Render();
 	if (isSwitch)
