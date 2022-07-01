@@ -26,6 +26,7 @@
 #define MARIO_STATE_IDLE			0
 #define MARIO_STATE_WALKING_RIGHT	100
 #define MARIO_STATE_WALKING_LEFT	200
+#define MARIO_STATE_INTO_PIPE		800
 
 #define MARIO_STATE_JUMP			300
 #define MARIO_STATE_RELEASE_JUMP    301
@@ -99,6 +100,8 @@
 
 #define ID_ANI_MARIO_DIE 499
 
+#define ID_ANI_MARIO_SMALL_PIPE 456
+#define ID_ANI_MARIO_BIG_PIPE 457
 
 #pragma endregion
 
@@ -127,6 +130,10 @@
 #define MARIO_TURNING_TAIL_TIME		300
 
 #define MAX_POWER_METER 7
+
+
+#define EXTRA_SCENE_STARTX 2980
+#define EXTRA_SCENE_STARTY 200
 
 class CMario : public CGameObject
 {
@@ -172,7 +179,8 @@ public:
 	BOOLEAN isHolding = false;
 	BOOLEAN isReadyToHold = false;
 	BOOLEAN isKick = false;
-	
+	BOOLEAN isFinish = false;
+	BOOLEAN isInExtraScene = false;
 	// TAIL_ATTACK
 	BOOLEAN isTuring = false;
 	int turningStack = 0;
@@ -214,7 +222,7 @@ public:
 	int GetLevel() {
 		return this->level;
 	}
-	
+
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
 	void StartKicking() { start_kicking = GetTickCount64(); isKick = true; }
 	void StopKicking() { start_kicking = 0; isKick = false; }
@@ -230,7 +238,15 @@ public:
 
 	void AddCoin() { coin++; }
 	void Respawn();
+	void Flying() { isFlying = true; }
+
 	bool IsPowerMaxed() { return powerMeter == MAX_POWER_METER ? true : false; }
 
 	bool IsSitting() { return isSitting; }
+	bool IsOnPlatform() { return isOnPlatform; }
+	bool IsAirBorne() { return isAirborne; }
+	void TelePort(float x,float y) {
+		this->x = x;
+		this->y = y;
+	}
 };

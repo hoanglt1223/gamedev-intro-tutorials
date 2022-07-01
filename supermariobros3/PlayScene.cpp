@@ -304,10 +304,9 @@ void CPlayScene::Update(DWORD dt)
 	{
 		objects[i]->Update(dt, &coObjects);
 	}
-
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
-	if (player == NULL) return;
-
+	CMario* mario = (CMario*)player;
+	if (player == NULL || mario->isFinish) return;
 	// Update camera to follow mario
 	float cx, cy;
 	player->GetPosition(cx, cy);
@@ -328,8 +327,15 @@ void CPlayScene::Render()
 {
 	map->Render();
 
+	player->Render();
+
 	for (size_t i = 0; i < objects.size(); i++)
-		objects[i]->Render();
+	{
+		if (!dynamic_cast<CMario*>(objects[i])) {
+			objects[i]->Render();
+		}
+	}
+
 
 	hud->Render();
 

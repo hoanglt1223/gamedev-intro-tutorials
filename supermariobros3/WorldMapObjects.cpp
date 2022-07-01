@@ -36,7 +36,7 @@ void CWorldMapObject::Render()
 	CAnimations* animations = CAnimations::GetInstance();
 	if (tag == OBJECT_TYPE_HAMMER && vx < 0)
 		animations->Get(HAMMER_ANI_ID_LEFT)->Render(x, y);
-	else
+	if (tag == OBJECT_TYPE_HAMMER && vx > 0)
 		animations->Get(HAMMER_ANI_ID_RIGHT)->Render(x, y);
 
 	if (tag == OBJECT_TYPE_BUSH)

@@ -22,7 +22,13 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vx += ax * dt;
 	vy += ay * dt;
 
-	DebugOut(L"mario x: %f\n", this->x);
+	DebugOut(L"mario x:  %f and mario:y %f \n", this->x, this->y);
+	
+	if (this->x > 2681.0f && !isInExtraScene) {
+		isFinish = true;
+		ax = MARIO_ACCEL_WALK_X;
+		ay = MARIO_GRAVITY;
+	}
 
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
 
@@ -98,8 +104,6 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithKoopas(e);
 	else if (dynamic_cast<CCoin*>(e->obj))
 		OnCollisionWithCoin(e);
-	else if (dynamic_cast<CPortal*>(e->obj))
-		OnCollisionWithPortal(e);
 	else if (dynamic_cast<CBrick*>(e->obj))
 		OnCollisionWithBrick(e);
 	else if (dynamic_cast<CPlatform*>(e->obj))
@@ -114,12 +118,29 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithLeaf(e);
 	else if (dynamic_cast<Switch*>(e->obj))
 		OnCollisionWithSwitch(e);
+	
+	if (dynamic_cast<CPortal*>(e->obj))
+		OnCollisionWithPortal(e);
 }
 
 void CMario::OnCollisionWithPlatForm(LPCOLLISIONEVENT e) {
 	CPlatform* platform = dynamic_cast<CPlatform*>(e->obj);
 	if (e->nx != 0 && isTuring && platform->GetType() == BRICK_BREAKABLE) {
 		platform->Delete();
+	}
+	if (isSitting || state == MARIO_STATE_INTO_PIPE) {
+		SetState(MARIO_STATE_INTO_PIPE);
+		platform->SetIsBlocking(0);
+		if (platform->GetType() == PIPE_DOWN) {
+			vy = MARIO_ACCEL_FLY_X;
+		}
+	}
+	if (state == MARIO_STATE_JUMP || state == MARIO_STATE_INTO_PIPE) {
+		if (platform->GetType() == PIPE_UP) {
+			SetState(MARIO_STATE_INTO_PIPE);
+			vy = -MARIO_ACCEL_FLY_X;
+			platform->SetIsBlocking(0);
+		}
 	}
 }
 
@@ -210,7 +231,20 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 {
 	CPortal* p = (CPortal*)e->obj;
-	CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
+	
+	int playX = 2320;
+	int playY = 300;
+	if (p->GetSceneId() == 1 && isSitting)
+	{
+		isInExtraScene = true;
+		this->TelePort(EXTRA_SCENE_STARTX, EXTRA_SCENE_STARTY);
+		SetState(MARIO_STATE_SIT_RELEASE);
+		SetState(MARIO_STATE_IDLE);
+	}
+	else if (p->GetSceneId() == 0) {
+		this->TelePort(playX, playY);
+		isInExtraScene = false;
+	}
 }
 
 void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
@@ -404,6 +438,13 @@ void CMario::Render()
 	else if (level == MARIO_LEVEL_SMALL)
 		aniId = GetAniIdSmall();
 
+	if (state == MARIO_STATE_INTO_PIPE) {
+		if (level == MARIO_LEVEL_BIG)
+			aniId = ID_ANI_MARIO_BIG_PIPE;
+		if (level == MARIO_LEVEL_SMALL)
+			aniId = ID_ANI_MARIO_SMALL_PIPE;
+	}
+
 	animations->Get(aniId)->Render(-nx, x, y);
 
 	RenderBoundingBox();
@@ -481,7 +522,7 @@ void CMario::SetState(int state)
 			SetState(MARIO_STATE_IDLE);
 			break;
 		}
-		if (level == MARIO_LEVEL_RACOON)
+		if (level == MARIO_LEVEL_RACOON && !isOnPlatform)
 			isAirborne = true;
 		break;
 
@@ -543,8 +584,11 @@ void CMario::SetState(int state)
 			StartTurning();
 		}
 		break;
+	case MARIO_STATE_INTO_PIPE:
+		vx = 0;
+		vy = 0;
+		break;
 	}
-
 
 	CGameObject::SetState(state);
 }

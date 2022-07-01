@@ -6,8 +6,13 @@
 #define PLATFORM_SPECIAL 1
 #define PLATFORM_PIPE 3
 #define PLATFORM_PIPE_HIGH 2
+#define PIPE_EXTRA			8
 #define PLATFORM_ANI_PIPE 800011
 #define PLATFORM_ANI_PIPE_HIGH	800010
+#define PIPE_EXTRA_ANI	800012
+
+#define PIPE_DOWN 9
+#define PIPE_UP 10
 
 // 
 // The most popular type of object in Mario! 

@@ -35,7 +35,7 @@ protected:
 
 	// For enemy only
 	bool isDieByTail = false;
-
+	int isBlocking = 1;
 public:
 	bool IsDieByTail() { return isDieByTail; }
 	void SetIsDieByTail(bool die) { isDieByTail = die; }
@@ -85,7 +85,8 @@ public:
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e) {};
 
 	// Is this object blocking other object? If YES, collision framework will automatically push the other object
-	virtual int IsBlocking() { return 1; }
+	virtual int IsBlocking() { return isBlocking; }
+	void SetIsBlocking(bool block) { this->isBlocking = block; }
 
 	virtual int IsSpecialPlatform() { return 0; }
 

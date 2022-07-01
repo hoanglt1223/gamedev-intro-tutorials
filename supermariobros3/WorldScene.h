@@ -13,7 +13,7 @@
 class CWorldScene : public CScene
 {
 protected:
-	CWorldPlayer* player = NULL;					// A play scene has to have player, right? 
+	CWorldPlayer* player = NULL;
 	CMap* current_map = NULL;
 	CHud* hud = NULL;
 	vector<LPGAMEOBJECT> objects;

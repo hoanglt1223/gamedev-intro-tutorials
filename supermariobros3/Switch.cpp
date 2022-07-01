@@ -33,6 +33,7 @@ void Switch::SetState(int state) {
 	case SWITCH_STATE_PRESSED:
 		y += SWITCH_BBOX_HEIGHT - SWITCH_BBOX_PRESSED_HEIGHT;
 		ChangeBrickToCoin();
+		Delete();
 		break;
 	}
 }
