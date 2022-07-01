@@ -8,6 +8,7 @@ height	480
 3	scenes\introscene.txt
 1	scenes\scene01.txt
 2	scenes\scene02.txt
+4	scenes\worldscene.txt
 # id	file 
 [TEXTURES]
 -100	textures\bbox.png
@@ -20,3 +21,6 @@ height	480
 50	textures\enemies1.1.png	
 60	textures\map1-1.png
 130	textures\panel.png
+70	textures\HUD.png	
+80	textures\fonts.png
+120	textures\WorldMap.png
