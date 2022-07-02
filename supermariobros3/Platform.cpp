@@ -30,7 +30,7 @@ void CPlatform::RenderBoundingBox()
 
 void CPlatform::Render()
 {
-	RenderBoundingBox();
+	// RenderBoundingBox();
 	CAnimations* animations = CAnimations::GetInstance();
 	CSprites* s = CSprites::GetInstance();
 	float xx = x;
