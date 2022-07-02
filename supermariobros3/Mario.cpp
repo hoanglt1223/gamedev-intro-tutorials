@@ -242,7 +242,7 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 		SetState(MARIO_STATE_IDLE);
 	}
 	else if (p->GetSceneId() == 0) {
-		this->TelePort(playX, playY);
+		this->TelePort(OUT_OF_EXTRA_SCENE_STARTX, OUT_OF_EXTRA_SCENE_STARTY);
 		isInExtraScene = false;
 	}
 }

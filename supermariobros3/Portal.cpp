@@ -1,6 +1,5 @@
 #include "Portal.h"
 
-
 CPortal::CPortal(float l, float t, float r, float b, int scene_id )
 {
 	this->scene_id = scene_id;

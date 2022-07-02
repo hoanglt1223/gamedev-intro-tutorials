@@ -135,6 +135,10 @@
 #define EXTRA_SCENE_STARTX 2980
 #define EXTRA_SCENE_STARTY 200
 
+#define OUT_OF_EXTRA_SCENE_STARTX 2320
+#define OUT_OF_EXTRA_SCENE_STARTY 300
+
+
 class CMario : public CGameObject
 {
 	BOOLEAN isSitting;
