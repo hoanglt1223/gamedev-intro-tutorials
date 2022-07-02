@@ -28,12 +28,19 @@ int CWorldMapObject::GetAni(int option_tag) {
 		ani = PORTAL_ANI_ID_7;
 	else if (option_tag == 8)
 		ani = PORTAL_ANI_ID_8;
+	else if (option_tag == 9)
+		ani = PORTAL_ANI_ID_9;
 	return ani;
 }
 
 void CWorldMapObject::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
+	if (tag == OBJECT_TYPE_PORTAL)
+	{
+		animations->Get(GetAni(option_tag))->Render(x, y);
+	}
+
 	if (tag == OBJECT_TYPE_HAMMER && vx < 0)
 		animations->Get(HAMMER_ANI_ID_LEFT)->Render(x, y);
 	if (tag == OBJECT_TYPE_HAMMER && vx > 0)
@@ -43,12 +50,7 @@ void CWorldMapObject::Render()
 		animations->Get(BRUSH_ANI_ID)->Render(x, y);
 	if (tag == OBJECT_TYPE_STOP)
 		animations->Get(STOPPOINT_ANI_ID)->Render(x, y);
-	if (tag == OBJECT_TYPE_PORTAL)
-		for (int i = 1; i <= 8; i++)
-		{
-			int ani = GetAni(i);
-			animations->Get(ani)->Render(x, y);
-		}
+
 	//RenderBoundingBox();
 }
 void CWorldMapObject::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
