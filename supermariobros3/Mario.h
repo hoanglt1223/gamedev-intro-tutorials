@@ -14,6 +14,9 @@
 #define MARIO_ACCEL_RUN_X	0.0007f
 #define MARIO_ACCEL_FLY_X	0.0008f
 
+#define MARIO_LIMIX_X		10
+#define PLUS_X_VALUE		2
+
 #define MARIO_JUMP_SPEED_Y		0.5f
 #define MARIO_BIG_JUMP_SPEED_Y		0.6f
 #define MARIO_JUMP_RUN_SPEED_Y	0.6f

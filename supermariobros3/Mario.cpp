@@ -80,6 +80,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	isOnPlatform = false;
 
+	if (x <= 10)
+	{
+		vx = 0;
+	}
+
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
@@ -470,12 +475,22 @@ void CMario::SetState(int state)
 		maxVx = -MARIO_RUNNING_SPEED;
 		ax = -MARIO_ACCEL_RUN_X;
 		nx = -1;
+		if (x <= MARIO_LIMIX_X)
+		{
+			maxVx = MARIO_RUNNING_SPEED;
+			x += PLUS_X_VALUE;
+		}
 		break;
 	case MARIO_STATE_WALKING_RIGHT:
 		if (isSitting) break;
 		maxVx = MARIO_WALKING_SPEED;
 		ax = MARIO_ACCEL_WALK_X;
 		nx = 1;
+		if (x <= MARIO_LIMIX_X)
+		{
+			maxVx = MARIO_WALKING_SPEED;
+			x += PLUS_X_VALUE;
+		}
 		break;
 	case MARIO_STATE_WALKING_LEFT:
 		if (isSitting) break;
