@@ -13,6 +13,8 @@
 
 #define PIPE_DOWN 9
 #define PIPE_UP 10
+#define PLATFORM_PIPE_HIGH_PORTAL 12
+#define PLATFORM_PIPE_PORTAL 13
 
 // 
 // The most popular type of object in Mario! 
@@ -26,7 +28,6 @@ protected:
 	int type;
 	int spriteIdBegin, spriteIdMiddle, spriteIdEnd;
 	int isBlocking = 1;
-
 public: 
 	CPlatform(float x, float y,
 		float cell_width, float cell_height, int length, int type,

@@ -30,7 +30,7 @@ void CPlatform::RenderBoundingBox()
 
 void CPlatform::Render()
 {
-	//RenderBoundingBox();
+	RenderBoundingBox();
 	CAnimations* animations = CAnimations::GetInstance();
 	CSprites* s = CSprites::GetInstance();
 	float xx = x;
@@ -50,6 +50,14 @@ void CPlatform::Render()
 		break;
 	case PLATFORM_PIPE:
 		animations->Get(PLATFORM_ANI_PIPE)->Render(x + diff_x, y - diff_y1);
+		break;
+	case PLATFORM_PIPE_HIGH_PORTAL:
+		animations->Get(PLATFORM_ANI_PIPE_HIGH)->Render(x + diff_x, y - diff_y);
+		SetIsBlocking(0);
+		break;
+	case PLATFORM_PIPE_PORTAL:
+		animations->Get(PLATFORM_ANI_PIPE)->Render(x + diff_x, y - diff_y1);
+		SetIsBlocking(0);
 		break;
 	case PIPE_EXTRA:
 		animations->Get(PIPE_EXTRA_ANI)->Render(x + diff_x, y - diff_y1);

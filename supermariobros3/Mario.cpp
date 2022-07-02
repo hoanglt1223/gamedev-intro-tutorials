@@ -23,7 +23,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vy += ay * dt;
 
 	DebugOut(L"mario x:  %f and mario:y %f \n", this->x, this->y);
-	
+
 	if (this->x > 2681.0f && !isInExtraScene) {
 		isFinish = true;
 		ax = MARIO_ACCEL_WALK_X;
@@ -118,7 +118,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithLeaf(e);
 	else if (dynamic_cast<Switch*>(e->obj))
 		OnCollisionWithSwitch(e);
-	
+
 	if (dynamic_cast<CPortal*>(e->obj))
 		OnCollisionWithPortal(e);
 }
@@ -129,9 +129,9 @@ void CMario::OnCollisionWithPlatForm(LPCOLLISIONEVENT e) {
 		platform->Delete();
 	}
 	if (isSitting || state == MARIO_STATE_INTO_PIPE) {
-		SetState(MARIO_STATE_INTO_PIPE);
-		platform->SetIsBlocking(0);
 		if (platform->GetType() == PIPE_DOWN) {
+			SetState(MARIO_STATE_INTO_PIPE);
+			platform->SetIsBlocking(0);
 			vy = MARIO_ACCEL_FLY_X;
 		}
 	}
@@ -231,7 +231,7 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 {
 	CPortal* p = (CPortal*)e->obj;
-	
+
 	int playX = 2320;
 	int playY = 300;
 	if (p->GetSceneId() == 1 && isSitting)
