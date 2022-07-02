@@ -96,7 +96,7 @@ void PiranhaPlantFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		float xMario, yMario;
 		mario->GetXandY(xMario, yMario);
 	/*	if ((floor(xMario) + (float)mWidth + PIRANHAPLANT_ACTIVE_RANGE <= x
-			|| ceil(xMario) >= x + PIRANHAPLANT_BBOX_WIDTH + PIRANHAPLANT_ACTIVE_RANGE)
+			|| ceil(xMario) >= x + PIRANHAPLANT_FIRE_BBOX_WIDTH + PIRANHAPLANT_ACTIVE_RANGE)
 			&& state == PIRANHAPLANT_STATE_INACTIVE && delay_start == 0)
 			SetState(PIRANHAPLANT_STATE_DARTING);*/
 			//! 60 is red piranha active zone
@@ -104,14 +104,14 @@ void PiranhaPlantFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 			&& floor(xMario) + (float)mWidth <= x
 			&& state == PIRANHAPLANT_STATE_INACTIVE && delay_start == 0
 			&& !isMarioInActiveZone
-			|| floor(xMario) > x && floor(xMario) < x + PIRANHAPLANT_BBOX_WIDTH + 60
+			|| floor(xMario) > x && floor(xMario) < x + PIRANHAPLANT_FIRE_BBOX_WIDTH + 60
 			&& state == PIRANHAPLANT_STATE_INACTIVE && delay_start == 0
 			&& !isMarioInActiveZone)
 		{
 			SetState(PIRANHAPLANT_STATE_DARTING);
 			isMarioInActiveZone = true;
 		}
-		if (floor(xMario) < x - 60 || floor(xMario) > x + PIRANHAPLANT_BBOX_WIDTH + 60) {
+		if (floor(xMario) < x - 60 || floor(xMario) > x + PIRANHAPLANT_FIRE_BBOX_WIDTH + 60) {
 			isMarioInActiveZone = false;
 		}
 	
@@ -125,7 +125,7 @@ void PiranhaPlantFire::GetBoundingBox(float& left, float& top,
 {
 	left = x;
 	top = y;
-	right = x + PIRANHAPLANT_BBOX_WIDTH;
+	right = x + PIRANHAPLANT_FIRE_BBOX_WIDTH;
 	bottom = y + BBHeight;
 }
 

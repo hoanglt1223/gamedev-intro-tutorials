@@ -46,8 +46,8 @@ public:
 	void GetPosition(float& x, float& y) { x = this->x; y = this->y; }
 	void GetSpeed(float& vx, float& vy) { vx = this->vx; vy = this->vy; }
 
-	int GetX() { return this->x; }
-	int GetY() { return this->y; }
+	float GetX() { return this->x; }
+	float GetY() { return this->y; }
 	int GetTag() { return this->tag; }
 	int GetState() { return this->state; }
 	int GetDirectionX() { return this->nx; }
